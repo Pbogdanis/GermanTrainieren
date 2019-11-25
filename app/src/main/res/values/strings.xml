@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">GermanTrainieren</string>
+    <string name="articles">Play with articles</string>
+    <string name="plurals">Play with plurals</string>
+    <string name="edit_list">Edit yout List</string>
+    <string name="save">Save new word</string>
+    <string name="delete">Delete existing word</string>
+    <string name="new_article">Enter an article</string>
+    <string name="new_singular">Enter the singular</string>
+    <string name="new_plural">Enter the plural</string>
+    <string name="filter">Find your word</string>
+    <string name="check_answer_btn">Check your answer</string>
+    <string name="load_list">Load your list</string>
+</resources>
