@@ -56,7 +56,6 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
         _new_singular_value = new_singular.getText().toString();
         _new_plural_value = new_plural.getText().toString();
 
-
         //Check if all values have been inserted
         if(_new_article_value.isEmpty() ||
                 _new_singular_value.isEmpty() ||
@@ -69,7 +68,6 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
         if (saveIsValid){
             SaveToFile();
             saveIsValid = false;
-            //Toast.makeText(this, "New word inserted", Toast.LENGTH_SHORT).show();
         }
 
     }
