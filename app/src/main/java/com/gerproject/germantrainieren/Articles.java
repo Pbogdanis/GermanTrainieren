@@ -11,12 +11,19 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.List;
+
+import Models.ArticlesModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.gerproject.germantrainieren.CSVFile.articles;
 import static com.gerproject.germantrainieren.CSVFile.singular;
 
-public class Articles extends AppCompatActivity implements View.OnClickListener {
+public class Articles extends AppCompatActivity {
 
     private TextView _question_txt;
     private String _next_article;
@@ -24,23 +31,82 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
     private EditText _answer_txt;
     private Toast toastMsg;
     public static ArrayList<String> cpArticles, cpSingular;
+    private TextView textViewResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.articles_layout);
+        setContentView(R.layout.post_layout);
 
-        cpArticles = new ArrayList<String>(articles);
+        textViewResult = findViewById(R.id.text_result);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://germanapi.azurewebsites.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+        //Call<List<ArticlesModel>> call = jsonPlaceHolderApi.GetAllFromArticles();
+
+        /*call.enqueue(new Callback<List<ArticlesModel>>() {
+            @Override
+            public void onResponse(Call<List<ArticlesModel>> call, Response<List<ArticlesModel>> response) {
+                if(!response.isSuccessful()){
+                    textViewResult.setText("Code: " + response.code() + response.message());
+                    return;
+                }
+                List<ArticlesModel> allWords = response.body();
+
+                for (ArticlesModel model : allWords ){
+                    String content = "";
+                    content += "ID: " + model.getId() + "\n";
+                    content += "Article: " + model.getArticle() + "\n";
+                    content += "Singular: " + model.getSingular() + "\n\n";
+
+                    textViewResult.append(content);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ArticlesModel>> call, Throwable t) {
+                textViewResult.setText(t.getMessage());
+            }
+        });*/
+
+        ArticlesModel newSingular = new ArticlesModel();
+        newSingular.setSingular("testFromAndroid01");
+        newSingular.setArticle("testFromAndroid02");
+        Call<List<ArticlesModel>> call = jsonPlaceHolderApi.InsertSingular(newSingular);
+        call.enqueue(new Callback<List<ArticlesModel>>() {
+            @Override
+            public void onResponse(Call<List<ArticlesModel>> call, Response<List<ArticlesModel>> response) {
+                if(!response.isSuccessful()){
+                    textViewResult.setText("Code: " + response.code() + response.message());
+                    return;
+                }
+                String result = String.valueOf(response.code());
+                textViewResult.setText(result);
+
+            }
+
+            @Override
+            public void onFailure(Call<List<ArticlesModel>> call, Throwable t) {
+                textViewResult.setText(t.getMessage());
+            }
+        });
+
+        /*cpArticles = new ArrayList<String>(articles);
         cpSingular = new ArrayList<String>(singular);
 
         _question_txt = findViewById(R.id.question_txt);
         _answer_txt = findViewById(R.id.answer_txt);
         _random_index = getRandomNumberInRange(0, cpArticles.size() - 1);
         _next_article = "The article of " + cpSingular.get(_random_index) + " is : ";
-        _question_txt.setText(_next_article);
+        _question_txt.setText(_next_article);*/
     }
 
-    @Override
+    /*@Override
     public void onClick(View v) {
 
         if(!cpArticles.isEmpty()){
@@ -83,7 +149,7 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
 
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
-    }
+    }*/
 
 
 }

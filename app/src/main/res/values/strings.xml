@@ -11,4 +11,5 @@
     <string name="filter">Find your word</string>
     <string name="check_answer_btn">Check your answer</string>
     <string name="load_list">Load your list</string>
+    <string name="api_url">http://localhost:54801/</string>
 </resources>

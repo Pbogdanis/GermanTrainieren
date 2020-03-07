@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static List dataFromCSV;
     public static String pathFromFile;
     public static boolean permissionGranted;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +53,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.article_btn:
 
                 //Check if user has provided a .csv first!
-                if(checkForCSV()){
+                /*if(checkForCSV()){
                     intent = new Intent(this, Articles.class);
                     this.startActivity(intent);
                     break;
                 } else {
                     Toast.makeText(this, "Please provide a .csv first to load the data", Toast.LENGTH_SHORT).show();
                     break;
-                }
+                }*/
+                intent = new Intent(this, Articles.class);
+                this.startActivity(intent);
+
 
 
 
