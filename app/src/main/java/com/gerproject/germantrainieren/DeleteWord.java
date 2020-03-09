@@ -28,7 +28,6 @@ import static com.gerproject.germantrainieren.CSVFile.articles;
 import static com.gerproject.germantrainieren.CSVFile.concat;
 import static com.gerproject.germantrainieren.CSVFile.plural;
 import static com.gerproject.germantrainieren.CSVFile.singular;
-import static com.gerproject.germantrainieren.MainActivity.permissionGranted;
 
 public class DeleteWord extends AppCompatActivity implements View.OnClickListener {
 
@@ -90,65 +89,6 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         //Save changes to file
-        WriteToFile();
-    }
 
-    public void WriteToFile() {
-        //Ask for WRITE_EXTERNAL_STORAGE permission
-        if(permissionGranted){
-
-            FileWriter writer = null;
-
-            String filename = "csvfile.csv";
-
-            File file = new File(getExternalFilesDir(null), filename);
-
-            FileOutputStream outputStream = null;
-            try {
-                cpArticles.remove(_idForDeletion);
-                cpSingular.remove(_idForDeletion);
-                cpPlural.remove(_idForDeletion);
-                cpConcat.remove(_idForDeletion);
-
-                //Refresh listadapter
-                listAdapter = new ArrayAdapter<String>(this, R.layout.listview_row, cpConcat);
-                listView.setAdapter(listAdapter);
-                outputStream = new FileOutputStream(file, false);
-                //outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-                for (int i = 0; i < cpArticles.size(); i++) {
-                    outputStream.write((cpArticles.get(i) + ",").getBytes());
-                    outputStream.write((cpSingular.get(i) + ",").getBytes());
-                    outputStream.write((cpPlural.get(i) + "\n").getBytes());
-                }
-                outputStream.close();
-                Toast.makeText(this, "Word deleted and new file generated", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-
-            //Ask for permission
-            ActivityCompat.requestPermissions(DeleteWord.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-        }
-     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    permissionGranted = true;
-
-                } else {
-
-                    Toast.makeText(DeleteWord.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
-                    permissionGranted = false;
-
-                }
-            }
-        }
     }
 }

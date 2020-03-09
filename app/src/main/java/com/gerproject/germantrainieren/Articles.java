@@ -1,44 +1,34 @@
 package com.gerproject.germantrainieren;
 
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import Models.ArticlesModel;
+import Helpers.RandomIndex;
+import Helpers.GetQueries;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.gerproject.germantrainieren.CSVFile.articles;
-import static com.gerproject.germantrainieren.CSVFile.singular;
-
 public class Articles extends AppCompatActivity {
 
-    private TextView _question_txt;
-    private String _next_article;
-    private int _random_index;
-    private EditText _answer_txt;
-    private Toast toastMsg;
-    public static ArrayList<String> cpArticles, cpSingular;
-    private TextView textViewResult;
+
+    private TextView _wordFromList;
+    private List<ArticlesModel> _allArticles;
+    private Integer _random_index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.post_layout);
+        setContentView(R.layout.articles_layout);
 
-        textViewResult = findViewById(R.id.text_result);
+        _wordFromList = findViewById(R.id.wordFromList);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://germanapi.azurewebsites.net/")
@@ -47,34 +37,38 @@ public class Articles extends AppCompatActivity {
 
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-        //Call<List<ArticlesModel>> call = jsonPlaceHolderApi.GetAllFromArticles();
-
+        Call<List<ArticlesModel>> call = jsonPlaceHolderApi.GetAllFromArticles();
+        _allArticles = GetQueries.getAllWords(call);
         /*call.enqueue(new Callback<List<ArticlesModel>>() {
             @Override
             public void onResponse(Call<List<ArticlesModel>> call, Response<List<ArticlesModel>> response) {
                 if(!response.isSuccessful()){
-                    textViewResult.setText("Code: " + response.code() + response.message());
+                    //textViewResult.setText("Code: " + response.code() + response.message());
                     return;
                 }
-                List<ArticlesModel> allWords = response.body();
+                _allArticles = response.body();
 
-                for (ArticlesModel model : allWords ){
+                for (ArticlesModel model : _allArticles ){
                     String content = "";
                     content += "ID: " + model.getId() + "\n";
                     content += "Article: " + model.getArticle() + "\n";
                     content += "Singular: " + model.getSingular() + "\n\n";
 
-                    textViewResult.append(content);
+                    //textViewResult.append(content);
                 }
             }
 
             @Override
             public void onFailure(Call<List<ArticlesModel>> call, Throwable t) {
-                textViewResult.setText(t.getMessage());
+                //textViewResult.setText(t.getMessage());
             }
         });*/
 
-        ArticlesModel newSingular = new ArticlesModel();
+        //_random_index = RandomIndex.getRandomNumberInRange(0, _allArticles.size() - 1);
+        //_wordFromList.setText((CharSequence) _allArticles.get(_random_index));
+
+
+        /*ArticlesModel newSingular = new ArticlesModel();
         newSingular.setSingular("testFromAndroid01");
         newSingular.setArticle("testFromAndroid02");
         Call<List<ArticlesModel>> call = jsonPlaceHolderApi.InsertSingular(newSingular);
@@ -94,7 +88,7 @@ public class Articles extends AppCompatActivity {
             public void onFailure(Call<List<ArticlesModel>> call, Throwable t) {
                 textViewResult.setText(t.getMessage());
             }
-        });
+        });*/
 
         /*cpArticles = new ArrayList<String>(articles);
         cpSingular = new ArrayList<String>(singular);

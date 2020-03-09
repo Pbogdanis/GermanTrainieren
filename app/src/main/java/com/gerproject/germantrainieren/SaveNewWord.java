@@ -24,7 +24,6 @@ import static com.gerproject.germantrainieren.CSVFile.articles;
 import static com.gerproject.germantrainieren.CSVFile.concat;
 import static com.gerproject.germantrainieren.CSVFile.plural;
 import static com.gerproject.germantrainieren.CSVFile.singular;
-import static com.gerproject.germantrainieren.MainActivity.permissionGranted;
 
 public class SaveNewWord extends AppCompatActivity implements View.OnClickListener {
 
@@ -66,41 +65,9 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
         }
 
         if (saveIsValid){
-            SaveToFile();
+            //SaveToFile();
             saveIsValid = false;
         }
 
-    }
-
-    public void SaveToFile() {
-        //Ask for WRITE_EXTERNAL_STORAGE permission
-        if(permissionGranted){
-
-            String filename = "csvfile.csv";
-            File file = new File(getExternalFilesDir(null), filename);
-            FileOutputStream outputStream = null;
-            try {
-                outputStream = new FileOutputStream(file, true);
-
-                cpArticles.add(_new_article_value);
-                cpSingular.add(_new_singular_value);
-                cpPlural.add(_new_plural_value);
-                cpConcat.add(_new_article_value + " " + _new_singular_value + " " + _new_plural_value);
-
-                outputStream.write((_new_article_value + ",").getBytes());
-                outputStream.write((_new_singular_value + ",").getBytes());
-                outputStream.write((_new_plural_value+ "\n").getBytes());
-
-                outputStream.flush();
-                outputStream.close();
-                Toast.makeText(this, "Word added to file", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-
-            //Ask for permission
-            ActivityCompat.requestPermissions(SaveNewWord.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-        }
     }
 }
