@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.05" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
@@ -61,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.2" />
 
     <TextView
         android:id="@+id/question_txt"
@@ -79,6 +79,7 @@
         android:id="@+id/wordFromList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
@@ -89,6 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/derTxt"
+        android:onClick="onClick"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
@@ -99,6 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dieTxt"
+        android:onClick="onClick"
         app:layout_constraintBottom_toTopOf="@+id/guideline13"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
@@ -109,6 +112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dastxt"
+        android:onClick="onClick"
         app:layout_constraintBottom_toTopOf="@+id/guideline14"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline5"

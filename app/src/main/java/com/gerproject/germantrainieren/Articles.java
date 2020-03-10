@@ -1,7 +1,10 @@
 package com.gerproject.germantrainieren;
 
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,19 +12,20 @@ import java.util.List;
 
 import Models.ArticlesModel;
 import Helpers.RandomIndex;
-import Helpers.GetQueries;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class Articles extends AppCompatActivity {
+public class Articles extends AppCompatActivity implements View.OnClickListener {
 
 
     private TextView _wordFromList;
     private List<ArticlesModel> _allArticles;
     private Integer _random_index;
+    private String _btnPressedTxt;
+    private Toast _toastMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,34 +42,28 @@ public class Articles extends AppCompatActivity {
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
         Call<List<ArticlesModel>> call = jsonPlaceHolderApi.GetAllFromArticles();
-        _allArticles = GetQueries.getAllWords(call);
-        /*call.enqueue(new Callback<List<ArticlesModel>>() {
+
+        call.enqueue(new Callback<List<ArticlesModel>>() {
             @Override
             public void onResponse(Call<List<ArticlesModel>> call, Response<List<ArticlesModel>> response) {
                 if(!response.isSuccessful()){
-                    //textViewResult.setText("Code: " + response.code() + response.message());
+                    setContentView(R.layout.failure_layout);
                     return;
                 }
                 _allArticles = response.body();
 
-                for (ArticlesModel model : _allArticles ){
-                    String content = "";
-                    content += "ID: " + model.getId() + "\n";
-                    content += "Article: " + model.getArticle() + "\n";
-                    content += "Singular: " + model.getSingular() + "\n\n";
-
-                    //textViewResult.append(content);
-                }
+                //Do all the code here, after the response//
+                _random_index = RandomIndex.getRandomNumberInRange(0, _allArticles.size() - 1);
+                _wordFromList.setText(_allArticles.get(_random_index).getSingular());
             }
 
             @Override
             public void onFailure(Call<List<ArticlesModel>> call, Throwable t) {
-                //textViewResult.setText(t.getMessage());
+                setContentView(R.layout.failure_layout);
             }
-        });*/
+        });
 
-        //_random_index = RandomIndex.getRandomNumberInRange(0, _allArticles.size() - 1);
-        //_wordFromList.setText((CharSequence) _allArticles.get(_random_index));
+
 
 
         /*ArticlesModel newSingular = new ArticlesModel();
@@ -100,10 +98,47 @@ public class Articles extends AppCompatActivity {
         _question_txt.setText(_next_article);*/
     }
 
-    /*@Override
+    @Override
     public void onClick(View v) {
 
-        if(!cpArticles.isEmpty()){
+        switch (v.getId()) {
+            case R.id.derBtn:
+                _btnPressedTxt = getString(R.string.derTxt);
+                break;
+            case R.id.dieBtn:
+                _btnPressedTxt = getString(R.string.dieTxt);
+                break;
+            case R.id.dasBtn:
+                _btnPressedTxt = getString(R.string.dastxt);
+                break;
+        }
+
+
+        if( _allArticles.get(_random_index).getArticle().equalsIgnoreCase(_btnPressedTxt) ){
+            Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Wrong! The correct article is " + _allArticles.get(_random_index).getArticle(), Toast.LENGTH_SHORT).show();
+        }
+
+        //Remove word from list//
+        _allArticles.remove(_allArticles.get(_random_index));
+
+        //Update view
+        if(!_allArticles.isEmpty()){
+            //Generate new random index
+            _random_index = RandomIndex.getRandomNumberInRange(0, _allArticles.size() - 1);
+            //Update view
+            _wordFromList.setText(_allArticles.get(_random_index).getSingular());
+        } else {
+            //Close activity and show MainActivity
+            _toastMsg = Toast.makeText(this, "The quiz is over!", Toast.LENGTH_SHORT);
+            _toastMsg.setGravity(Gravity.TOP| Gravity.CENTER, 0, 0);
+            _toastMsg.show();
+
+            finish();
+        }
+
+        /*if(!cpArticles.isEmpty()){
             if (_answer_txt.getText().toString().isEmpty()){
                 Toast.makeText(this, "Please select an answer", Toast.LENGTH_SHORT).show();
             } else {
@@ -136,14 +171,8 @@ public class Articles extends AppCompatActivity {
                 }
 
             }
-        }
+        }*/
     }
-
-    private static int getRandomNumberInRange(int min, int max) {
-
-        Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
-    }*/
 
 
 }
