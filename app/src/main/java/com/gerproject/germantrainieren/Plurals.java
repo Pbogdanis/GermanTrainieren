@@ -9,12 +9,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
+import java.util.List;
 
-import static com.gerproject.germantrainieren.CSVFile.singular;
-import static com.gerproject.germantrainieren.CSVFile.plural;
+import Models.PluralsModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static Helpers.RandomIndex.getRandomNumberInRange;
 
 public class Plurals extends AppCompatActivity implements View.OnClickListener {
 
@@ -22,68 +26,83 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
     private String _next_plural;
     private int _random_index;
     private EditText _answer_txt;
+    private String _answer;
     private Toast toastMsg;
-    public static ArrayList<String> cpSingular, cpPlurals;
-    private ArrayList<String> _allPluralsArray;
     private boolean _isCorrect;
+    private TextView _pluralFromList;
+    private List<PluralsModel> _allPlurals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plurals_layout);
 
-        cpSingular = new ArrayList<String>(singular);
-        cpPlurals = new ArrayList<String>(plural);
-
         _question_txt = findViewById(R.id.question_txt);
         _answer_txt = findViewById(R.id.answer_txt);
-        _random_index = getRandomNumberInRange(0, cpSingular.size() - 1);
-        _next_plural = "The plural of " + cpSingular.get(_random_index) + " is : ";
-        _question_txt.setText(_next_plural);
+        _pluralFromList = findViewById(R.id.pluralFromList);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://germanapi.azurewebsites.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+
+        Call<List<PluralsModel>> call = jsonPlaceHolderApi.GetAllFromPlurals();
+
+        call.enqueue(new Callback<List<PluralsModel>>() {
+            @Override
+            public void onResponse(Call<List<PluralsModel>> call, Response<List<PluralsModel>> response) {
+                if(!response.isSuccessful()){
+                    setContentView(R.layout.failure_layout);
+                    return;
+                }
+                _allPlurals = response.body();
+
+                //Do all the code here, after the response//
+                _random_index = getRandomNumberInRange(0, _allPlurals.size() - 1);
+                _pluralFromList.setText(_allPlurals.get(_random_index).getSingular());
+            }
+
+            @Override
+            public void onFailure(Call<List<PluralsModel>> call, Throwable t) {
+                setContentView(R.layout.failure_layout);
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
 
         _isCorrect = false;
-        _allPluralsArray = new ArrayList<String>();
-        if(!cpSingular.isEmpty()){
-            if (_answer_txt.getText().toString().isEmpty()){
+        _answer = _answer_txt.getText().toString();
+        //_allPluralsArray = new ArrayList<String>();
+        if(!_allPlurals.isEmpty()){
+            if (_answer.isEmpty()){
                 Toast.makeText(this, "Please select an answer", Toast.LENGTH_SHORT).show();
             } else {
 
-                //Check if there are more plurals
-                if(cpPlurals.get(_random_index).contains("/") ){
-                    String[] allPlurals = cpPlurals.get(_random_index).split("/");
-
-                    Collections.addAll(_allPluralsArray, allPlurals);
-                } else {
-                    _allPluralsArray.add(cpPlurals.get(_random_index));
+                //Check for correct answer//
+                if ( _allPlurals.get(_random_index).getPlural().equalsIgnoreCase(_answer)){
+                    _isCorrect = true;
                 }
 
-
-                for (int i=0; i<_allPluralsArray.size(); i++){
-                    if(_allPluralsArray.get(i).equalsIgnoreCase(_answer_txt.getText().toString())){
-                        _isCorrect = true;
-                    }
-                }
                 if(_isCorrect){
                     Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Wrong! The correct plural is " + cpPlurals.get(_random_index), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Wrong! The correct plural is " +  _allPlurals.get(_random_index).getPlural(), Toast.LENGTH_SHORT).show();
                 }
 
-                //Remove word from the lists
-                cpSingular.remove(_random_index);
-                cpPlurals.remove(_random_index);
+                //Remove word from list//
+                _allPlurals.remove(_allPlurals.get(_random_index));
 
                 //Update view
-                if(!cpSingular.isEmpty()){
+                if(!_allPlurals.isEmpty()){
                     //Generate new random index
-                    _random_index = getRandomNumberInRange(0, cpSingular.size() - 1);
+                    _random_index = getRandomNumberInRange(0, _allPlurals.size() - 1);
                     //Update view
-                    _next_plural = "The plural of " + cpSingular.get(_random_index) + " is : ";
-                    _question_txt.setText(_next_plural);
+                    _next_plural = _allPlurals.get(_random_index).getSingular();
+                    _pluralFromList.setText(_next_plural);
                     _answer_txt.setText("");
                 } else {
                     //Close activity and show MainActivity
@@ -96,11 +115,5 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
 
             }
         }
-    }
-
-    private static int getRandomNumberInRange(int min, int max) {
-
-        Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
     }
 }

@@ -13,6 +13,7 @@
     <string name="load_list">Load your list</string>
     <string name="api_url">http://germanapi.azurewebsites.net/</string>
     <string name="playWithArticlesPlaceholder">What is the article of</string>
+    <string name="playWithPluralsPlaceholder">What is the plural of</string>
     <string name="derTxt">DER</string>
     <string name="dieTxt">DIE</string>
     <string name="dastxt">DAS</string>
