@@ -27,19 +27,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             //new play with articles activity
             case R.id.article_btn:
-
                 intent = new Intent(this, Articles.class);
                 this.startActivity(intent);
                 break;
-                //new play with plurals activity
+            //new play with plurals activity
             case R.id.plurals_btn:
-
-
                 intent = new Intent(this, Plurals.class);
                 this.startActivity(intent);
                 break;
-
-
+            case R.id.saveBtn:
+                intent = new Intent(this, SaveNewWord.class);
+                this.startActivity(intent);
+                break;
         }
     }
 

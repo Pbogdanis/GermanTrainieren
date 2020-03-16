@@ -1,9 +1,11 @@
 package com.gerproject.germantrainieren;
 
+import java.util.Collection;
 import java.util.List;
 
 import Models.ArticlesModel;
 import Models.PluralsModel;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -18,7 +20,7 @@ public interface JsonPlaceHolderApi {
     Call<List<PluralsModel>> GetAllFromPlurals();
 
     @POST("api/words/newsingular")
-    Call<List<ArticlesModel>> InsertSingular(@Body ArticlesModel newSingular);
+    Call<String> InsertSingular(@Body ArticlesModel newSingular);
 
     @POST("api/words/newplural")
     Call<List<PluralsModel>> InsertPlural(@Body PluralsModel newSingular);
