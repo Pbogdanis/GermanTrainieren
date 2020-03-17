@@ -66,6 +66,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/new_plural"
         android:textColor="@color/black"
+        android:enabled="false"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
@@ -76,7 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.9" />
 
     <Button
         android:id="@+id/new_word_save"
@@ -98,6 +99,16 @@
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         app:layout_constraintVertical_bias="0.52" />
+
+    <Switch
+        android:id="@+id/wordType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/singular"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import Models.ArticlesModel;
+import Models.PluralsModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,10 +32,12 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
 
     private EditText _new_singular, _new_plural;
     private Spinner _new_article;
-    private String _new_article_value, _new_singular_value, _new_plural_value;
+    private String _new_article_value;
     private Boolean saveIsValid = false;
     private String[] _article_values = new String[]{"Choose the article","der","die","das"};
     private final List<String> _articlesList = new ArrayList<>(Arrays.asList(_article_values));
+    private Switch _wordType;
+    private Call<String> _call;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,29 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
         _new_singular = findViewById(R.id.new_singular);
         _new_plural = findViewById(R.id.new_plural);
         _new_article_value = "";
+        _wordType = findViewById(R.id.wordType);
+
+        _wordType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //Singular
+                if(!isChecked){
+                    //Enable items
+                    _wordType.setText(R.string.singular);
+                    _new_article.setEnabled(true);
+                    _new_singular.setEnabled(true);
+                    _new_plural.setEnabled(false);
+
+                } else {
+                    //Plural
+                    _wordType.setText(R.string.plural);
+                    _new_article.setEnabled(false);
+                    _new_singular.setEnabled(true);
+                    _new_plural.setEnabled(true);
+                }
+            }
+        });
+
+
 
         // Initializing an ArrayAdapter
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
@@ -103,39 +131,53 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
 
-        _new_singular_value = _new_singular.getText().toString();
-        _new_plural_value = _new_plural.getText().toString();
+        String _new_singular_value = _new_singular.getText().toString();
+        String _new_plural_value = _new_plural.getText().toString();
+
+        //Make post call to API
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://germanapi.azurewebsites.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonPlaceHolderApi _jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
         //Check if all values have been inserted
-        if(_new_article_value.isEmpty() ||
-                _new_singular_value.isEmpty() ||
-                _new_plural_value.isEmpty()){
-            Toast.makeText(this, "You must enter all the values", Toast.LENGTH_SHORT).show();
+        //Singular
+        if(!_wordType.isChecked()){
+            if(!_new_article_value.isEmpty() &&
+                    !_new_singular_value.isEmpty()){
+                saveIsValid = true;
+                //Prepare insert singular call
+                List<ArticlesModel> newSingular = new ArrayList<>();
+                ArticlesModel newSingularModel = new ArticlesModel();
+
+                newSingularModel.setArticle(_new_article_value);
+                newSingularModel.setSingular(_new_singular_value);
+                newSingular.add(newSingularModel);
+                _call = _jsonPlaceHolderApi.InsertSingular(newSingularModel);
+            }
         } else {
-            saveIsValid = true;
+            //Plural
+            if(!_new_singular_value.isEmpty() &&
+                    !_new_plural_value.isEmpty()){
+                saveIsValid = true;
+                //Prepare insert plural call
+                List<PluralsModel> newPlural = new ArrayList<>();
+                PluralsModel newpluralModel = new PluralsModel();
+
+                newpluralModel.setSingular(_new_singular_value);
+                newpluralModel.setPlural(_new_plural_value);
+                newPlural.add(newpluralModel);
+                _call = _jsonPlaceHolderApi.InsertPlural(newpluralModel);
+            }
         }
 
-        if (saveIsValid){
-            //Make post call to API
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://germanapi.azurewebsites.net/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+        if(!saveIsValid){
+            Toast.makeText(this, "You must enter all the values", Toast.LENGTH_SHORT).show();
+        } else {
 
-            JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-
-
-            List<ArticlesModel> newSingular = new ArrayList<>();
-            ArticlesModel newSingularModel = new ArticlesModel();
-
-            newSingularModel.setArticle(_new_article_value);
-            newSingularModel.setSingular(_new_singular_value);
-
-            newSingular.add(newSingularModel);
-
-            Call<String> call = jsonPlaceHolderApi.InsertSingular(newSingularModel);
-            call.enqueue(new Callback<String>() {
+            _call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     if(!response.isSuccessful()){

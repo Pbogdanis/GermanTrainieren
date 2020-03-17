@@ -16,5 +16,7 @@
     <string name="playWithPluralsPlaceholder">What is the plural of</string>
     <string name="derTxt">DER</string>
     <string name="dieTxt">DIE</string>
+    <string name="singular">Singular</string>
+    <string name="plural">Plural</string>
     <string name="dastxt">DAS</string>
 </resources>

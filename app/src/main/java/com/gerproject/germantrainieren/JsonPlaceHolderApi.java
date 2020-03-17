@@ -23,5 +23,5 @@ public interface JsonPlaceHolderApi {
     Call<String> InsertSingular(@Body ArticlesModel newSingular);
 
     @POST("api/words/newplural")
-    Call<List<PluralsModel>> InsertPlural(@Body PluralsModel newSingular);
+    Call<String> InsertPlural(@Body PluralsModel newSingular);
 }
