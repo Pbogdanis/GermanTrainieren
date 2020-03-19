@@ -1,11 +1,6 @@
 package com.gerproject.germantrainieren;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -16,18 +11,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.util.ArrayList;
 
-import static com.gerproject.germantrainieren.CSVFile.articles;
-import static com.gerproject.germantrainieren.CSVFile.concat;
-import static com.gerproject.germantrainieren.CSVFile.plural;
-import static com.gerproject.germantrainieren.CSVFile.singular;
 
 public class DeleteWord extends AppCompatActivity implements View.OnClickListener {
 
@@ -43,11 +28,6 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.delete_word_layout);
         listView = (ListView) findViewById(R.id.listview);
-
-        cpArticles = articles;
-        cpSingular = singular;
-        cpPlural = plural;
-        cpConcat = concat;
 
         listAdapter = new ArrayAdapter<String>(this, R.layout.listview_row, cpConcat);
 

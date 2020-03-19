@@ -19,6 +19,9 @@ public interface JsonPlaceHolderApi {
     @GET("api/words/plurals")
     Call<List<PluralsModel>> GetAllFromPlurals();
 
+    @GET("api/login")
+    Call<Boolean> GetLogin();
+
     @POST("api/words/newsingular")
     Call<String> InsertSingular(@Body ArticlesModel newSingular);
 

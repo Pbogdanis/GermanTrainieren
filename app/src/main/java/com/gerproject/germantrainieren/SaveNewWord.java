@@ -1,7 +1,9 @@
 package com.gerproject.germantrainieren;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,12 +17,20 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import Helpers.BasicAuthInterceptor;
+import Helpers.DialogBuilder;
 import Models.ArticlesModel;
 import Models.PluralsModel;
+import okhttp3.Credentials;
+import okhttp3.Headers;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -134,9 +144,17 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
         String _new_singular_value = _new_singular.getText().toString();
         String _new_plural_value = _new_plural.getText().toString();
 
+
+
+        //Authentication client
+        /*OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new BasicAuthInterceptor(username, password))
+                .build();*/
+
         //Make post call to API
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://germanapi.azurewebsites.net/")
+                //.client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

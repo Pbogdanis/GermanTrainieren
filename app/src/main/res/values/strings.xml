@@ -19,4 +19,8 @@
     <string name="singular">Singular</string>
     <string name="plural">Plural</string>
     <string name="dastxt">DAS</string>
+    <string name="username">username</string>
+    <string name="password">password</string>
+    <string name="signin">Sign In</string>
+    <string name="cancel">Cancel</string>
 </resources>
