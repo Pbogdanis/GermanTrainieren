@@ -37,6 +37,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.gerproject.germantrainieren.MainActivity.password;
+import static com.gerproject.germantrainieren.MainActivity.username;
+
 
 public class SaveNewWord extends AppCompatActivity implements View.OnClickListener {
 
@@ -147,14 +150,14 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
 
 
         //Authentication client
-        /*OkHttpClient client = new OkHttpClient.Builder()
+        OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new BasicAuthInterceptor(username, password))
-                .build();*/
+                .build();
 
         //Make post call to API
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://germanapi.azurewebsites.net/")
-                //.client(client)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

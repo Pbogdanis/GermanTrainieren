@@ -28,7 +28,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class DialogBuilder extends DialogFragment {
 
-    private String _username, _password;
+    public static String _username, _password;
     private Call<Boolean> _call;
     public static Boolean isAuth;
 
@@ -45,8 +45,8 @@ public class DialogBuilder extends DialogFragment {
         // Get the layout inflater
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_signin, null);
-        final EditText txtUser = (EditText) v.findViewById(R.id.username);
-        final EditText txtPwd = (EditText) v.findViewById(R.id.password);
+        final EditText txtUser = v.findViewById(R.id.username);
+        final EditText txtPwd = v.findViewById(R.id.password);
         builder.setTitle(R.string.app_name);
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
@@ -85,9 +85,10 @@ public class DialogBuilder extends DialogFragment {
                                         isAuth = false;
                                     } else {
                                         isAuth = true;
-                                        //TODO shared preferences to store the credentials
-                                        getDialog().dismiss();
+                                        MainActivity.saveCred();
                                         MainActivity.startAc();
+                                        MainActivity.dismissDialog();
+
                                     }
                                 }
 

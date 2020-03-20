@@ -18,6 +18,8 @@
     <string name="dieTxt">DIE</string>
     <string name="singular">Singular</string>
     <string name="plural">Plural</string>
+    <string name="id">Id</string>
+    <string name="article">Article</string>
     <string name="dastxt">DAS</string>
     <string name="username">username</string>
     <string name="password">password</string>
