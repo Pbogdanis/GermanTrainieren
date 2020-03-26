@@ -52,7 +52,7 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
         listView = findViewById(R.id.listview);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://germanapi.azurewebsites.net/")
+                .baseUrl(getResources().getString(R.string.api_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -139,7 +139,7 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        //Save changes to file
+        //Call delete
 
     }
 }

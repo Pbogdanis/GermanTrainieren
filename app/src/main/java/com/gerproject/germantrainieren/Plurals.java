@@ -42,7 +42,7 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
         _pluralFromList = findViewById(R.id.pluralFromList);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://germanapi.azurewebsites.net/")
+                .baseUrl(getResources().getString(R.string.api_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

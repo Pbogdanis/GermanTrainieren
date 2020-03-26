@@ -156,7 +156,7 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
 
         //Make post call to API
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://germanapi.azurewebsites.net/")
+                .baseUrl(getResources().getString(R.string.api_url))
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

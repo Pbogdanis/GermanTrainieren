@@ -35,7 +35,7 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
         _wordFromList = findViewById(R.id.wordFromList);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://germanapi.azurewebsites.net/")
+                .baseUrl(getResources().getString(R.string.api_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
