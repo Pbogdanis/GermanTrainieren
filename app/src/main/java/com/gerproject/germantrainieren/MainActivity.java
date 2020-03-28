@@ -56,16 +56,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.saveBtn:
                 intent = new Intent(this, SaveNewWord.class);
 
-                //DialogBuilder builder = new DialogBuilder();
-                //Check login status
-                /*while (!DialogBuilder.isAuth){
-                    // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
-
-                    showDialog();
-                    if(DialogBuilder.isAuth){
-                        break;
-                    }
-                }*/
                 if(hasCred()) {
                     startAc();
                 } else {
@@ -75,7 +65,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //new "delete word" activity
             case R.id.delete_btn:
                 intent = new Intent(this, DeleteWord.class);
-                startAc();
+
+                if(hasCred()) {
+                    startAc();
+                } else {
+                    showDialog();
+                }
+
                 break;
         }
     }

@@ -25,6 +25,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.widget.Toast.LENGTH_SHORT;
+import static com.gerproject.germantrainieren.MainActivity.mContext;
 
 public class DialogBuilder extends DialogFragment {
 
@@ -68,7 +69,7 @@ public class DialogBuilder extends DialogFragment {
 
                             //Make post call to API
                             Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl("http://germanapi.azurewebsites.net/")
+                                    .baseUrl(mContext.getResources().getString(R.string.api_url))
                                     .client(client)
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
@@ -81,7 +82,7 @@ public class DialogBuilder extends DialogFragment {
                                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                                     if(!response.isSuccessful()){
                                         //Not successfull
-                                        Toast.makeText(getContext(), "Wrong credentials!" , Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(mContext, "Wrong credentials!" , Toast.LENGTH_SHORT).show();
                                         isAuth = false;
                                     } else {
                                         isAuth = true;
@@ -100,7 +101,7 @@ public class DialogBuilder extends DialogFragment {
                             });
 
                         } else {
-                            Toast.makeText(getContext(), "Wrong credentials!" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Wrong credentials!" , Toast.LENGTH_SHORT).show();
                         }
                     }
                 })

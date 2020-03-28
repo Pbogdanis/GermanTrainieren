@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:layout_weight="1"
+        android:textColor="@color/black"
         android:text="@string/id"/>
 
     <TextView
@@ -15,11 +16,13 @@
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:layout_weight="1"
+        android:textColor="@color/black"
         android:text="@string/article"/>
     <TextView
         android:id="@+id/singular"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:layout_weight="1"
+        android:textColor="@color/black"
         android:text="@string/singular"/>
 </LinearLayout>
