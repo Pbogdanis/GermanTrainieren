@@ -25,6 +25,7 @@ import Helpers.BasicAuthInterceptor;
 import Helpers.ListViewAdapter;
 import Helpers.RandomIndex;
 import Models.ArticlesModel;
+import Models.PluralsModel;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,6 +52,7 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
     private List<ArticlesModel> _allArticles;
     private ArrayList<HashMap<String, String>> list;
     private JsonPlaceHolderApi _jsonPlaceHolderApi;
+    private List<PluralsModel> _pluralsOfSingular;
 
     public DeleteWord(){
         //Authentication client
@@ -160,27 +162,78 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
         if (_singularIdForDeletion == null){
             Toast.makeText(mContext,"Please select an item from the list", Toast.LENGTH_SHORT).show();
         } else {
-            //Call delete singular word from Database
+            //Call GetPluralsFromSingular from database
+            Retrofit retrofit02 = new Retrofit.Builder()
+                    .baseUrl(mContext.getResources().getString(R.string.api_url))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            JsonPlaceHolderApi jsonPlaceHolderApi02 = retrofit02.create(JsonPlaceHolderApi.class);
+            Call<List<PluralsModel>> call = jsonPlaceHolderApi02.GetPluralsOfSingular(_singularIdForDeletion);
 
-            Call<String> call = _jsonPlaceHolderApi.DeleteSingular(_singularIdForDeletion);
-
-            call.enqueue(new Callback<String>() {
+            call.enqueue(new Callback<List<PluralsModel>>() {
                 @Override
-                public void onResponse(Call<String> call, Response<String> response) {
-                    if(!response.isSuccessful()){
+                public void onResponse(Call<List<PluralsModel>> call, Response<List<PluralsModel>> response) {
+                    if (!response.isSuccessful()) {
                         setContentView(R.layout.failure_layout);
                         Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    Toast.makeText(mContext,response.body(), Toast.LENGTH_SHORT).show();
+                    _pluralsOfSingular = response.body();
+                    Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
+
+                    //Foreach plural in list, call delete plural
+                    for (PluralsModel pluralFromList : _pluralsOfSingular) {
+                        Call<String> call02 = _jsonPlaceHolderApi.DeletePlural(pluralFromList.getId());
+
+                        call02.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call02, Response<String> response) {
+                                if (!response.isSuccessful()) {
+                                    setContentView(R.layout.failure_layout);
+                                    Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                Toast.makeText(mContext, response.body(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call02, Throwable t) {
+                                setContentView(R.layout.failure_layout);
+                            }
+                        });
+                    }
+
+
+                    //Call delete singular word from Database
+                    Call<String> call03 = _jsonPlaceHolderApi.DeleteSingular(_singularIdForDeletion);
+
+                    call03.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call03, Response<String> response) {
+                            if (!response.isSuccessful()) {
+                                setContentView(R.layout.failure_layout);
+                                Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            Toast.makeText(mContext, response.body() + " from Singulars", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call03, Throwable t) {
+                            setContentView(R.layout.failure_layout);
+                        }
+                    });
+
+                    //RefreshListAdapter after all calls have been executed
                     RefreshListAdapter();
                 }
 
                 @Override
-                public void onFailure(Call<String> call, Throwable t) {
+                public void onFailure(Call<List<PluralsModel>> call, Throwable t) {
                     setContentView(R.layout.failure_layout);
                 }
             });
+
         }
     }
 
