@@ -32,5 +32,6 @@
     <string name="selectFromList">Please select an item from the list</string>
     <string name="wrongPlural">Wrong! The correct plural is</string>
     <string name="selectAnAnswer">Please select an answer</string>
-
+    <string name="wrongCreds">Wrong credentials!</string>
+    <string name="waitForServer">Please wait for server response</string>
 </resources>

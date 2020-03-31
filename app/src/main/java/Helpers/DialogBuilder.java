@@ -16,6 +16,7 @@ import com.gerproject.germantrainieren.JsonPlaceHolderApi;
 import com.gerproject.germantrainieren.MainActivity;
 import com.gerproject.germantrainieren.R;
 import com.gerproject.germantrainieren.SaveNewWord;
+import com.google.android.material.snackbar.Snackbar;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -45,7 +46,7 @@ public class DialogBuilder extends DialogFragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View v = inflater.inflate(R.layout.dialog_signin, null);
+        final View v = inflater.inflate(R.layout.dialog_signin, null);
         final EditText txtUser = v.findViewById(R.id.username);
         final EditText txtPwd = v.findViewById(R.id.password);
         builder.setTitle(R.string.app_name);
@@ -82,7 +83,7 @@ public class DialogBuilder extends DialogFragment {
                                 public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                                     if(!response.isSuccessful()){
                                         //Not successfull
-                                        Toast.makeText(mContext, "Wrong credentials!" , Toast.LENGTH_SHORT).show();
+                                        Snackbar.make(v, getString(R.string.wrongCreds), Snackbar.LENGTH_SHORT).show();
                                         isAuth = false;
                                     } else {
                                         isAuth = true;
@@ -101,7 +102,7 @@ public class DialogBuilder extends DialogFragment {
                             });
 
                         } else {
-                            Toast.makeText(mContext, "Wrong credentials!" , Toast.LENGTH_SHORT).show();
+                            Snackbar.make(v, getString(R.string.wrongCreds), Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 })
