@@ -25,4 +25,7 @@
     <string name="password">password</string>
     <string name="signin">Sign In</string>
     <string name="cancel">Cancel</string>
+    <string name="correct">Correct!</string>
+    <string name="wrong">Wrong! The correct article is </string>
+    <string name="over">The quiz is over!</string>
 </resources>
