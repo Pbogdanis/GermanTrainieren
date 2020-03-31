@@ -4,16 +4,20 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import Models.PluralsModel;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,6 +25,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static Helpers.RandomIndex.getRandomNumberInRange;
+import static com.gerproject.germantrainieren.MainActivity.mContext;
 
 public class Plurals extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,10 +33,26 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
     private int _random_index;
     private EditText _answer_txt;
     private String _answer;
-    private Toast toastMsg;
     private boolean _isCorrect;
     private TextView _pluralFromList;
     private List<PluralsModel> _allPlurals;
+    private JsonPlaceHolderApi _jsonPlaceHolderApi;
+
+    public Plurals(){
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(mContext.getResources().getString(R.string.api_url))
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        _jsonPlaceHolderApi = jsonPlaceHolderApi;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +62,7 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
         _answer_txt = findViewById(R.id.answer_txt);
         _pluralFromList = findViewById(R.id.pluralFromList);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getResources().getString(R.string.api_url))
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-
-        Call<List<PluralsModel>> call = jsonPlaceHolderApi.GetAllFromPlurals();
+        Call<List<PluralsModel>> call = _jsonPlaceHolderApi.GetAllFromPlurals();
 
         call.enqueue(new Callback<List<PluralsModel>>() {
             @Override
@@ -77,9 +91,18 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
         _isCorrect = false;
         _answer = _answer_txt.getText().toString();
 
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.top_coordinator);
+        Snackbar snack= Snackbar.make(coordinatorLayout, "Text", Snackbar.LENGTH_LONG);
+        View view = snack.getView();
+        CoordinatorLayout.LayoutParams params=(CoordinatorLayout.LayoutParams)view.getLayoutParams();
+        params.gravity = Gravity.TOP;
+        view.setLayoutParams(params);
+        //snackbar.show();
+
         if(!_allPlurals.isEmpty()){
             if (_answer.isEmpty()){
-                Snackbar.make(v, getString(R.string.selectAnAnswer), Snackbar.LENGTH_SHORT).show();
+                snack = Snackbar.make(coordinatorLayout, getString(R.string.selectAnAnswer), Snackbar.LENGTH_SHORT);
+                snack.show();
             } else {
 
                 //Check for correct answer//
@@ -88,9 +111,11 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
                 }
 
                 if(_isCorrect){
-                    Snackbar.make(v, getString(R.string.correct), Snackbar.LENGTH_SHORT).show();
+                    snack = Snackbar.make(coordinatorLayout, getString(R.string.correct), Snackbar.LENGTH_SHORT);
+                    snack.show();
                 } else {
-                    Snackbar.make(v, getString(R.string.wrongPlural) + " " +  _allPlurals.get(_random_index).getPlural(), Snackbar.LENGTH_SHORT).show();
+                    snack = Snackbar.make(coordinatorLayout, getString(R.string.wrongPlural) + " " +  _allPlurals.get(_random_index).getPlural(), Snackbar.LENGTH_SHORT);
+                    snack.show();
                 }
 
                 //Remove word from list//
@@ -106,7 +131,8 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
                     _answer_txt.setText("");
                 } else {
                     //Close activity and show MainActivity
-                    Snackbar.make(v, getString(R.string.over), Snackbar.LENGTH_SHORT).show();
+                    snack = Snackbar.make(coordinatorLayout, getString(R.string.over), Snackbar.LENGTH_SHORT);
+                    snack.show();
 
                     finish();
                 }
