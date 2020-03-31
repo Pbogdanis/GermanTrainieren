@@ -6,12 +6,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +24,6 @@ import java.util.Locale;
 
 import Helpers.BasicAuthInterceptor;
 import Helpers.ListViewAdapter;
-import Helpers.RandomIndex;
 import Models.ArticlesModel;
 import Models.PluralsModel;
 import okhttp3.OkHttpClient;
@@ -48,7 +48,6 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
     private Integer _singularIdForDeletion;
     private EditText filter;
     private ListViewAdapter listAdapter;
-    private int _idForDeletion;
     private List<ArticlesModel> _allArticles;
     private ArrayList<HashMap<String, String>> list;
     private JsonPlaceHolderApi _jsonPlaceHolderApi;
@@ -89,10 +88,10 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
                 _allArticles = response.body();
 
 
-                list=new ArrayList<HashMap<String,String>>();
+                list=new ArrayList<>();
 
                 for (ArticlesModel article: _allArticles){
-                    HashMap<String,String> hashmap=new HashMap<String, String>();
+                    HashMap<String,String> hashmap=new HashMap<>();
                     hashmap.put(FIRST_COLUMN, String.valueOf(article.getId()));
                     hashmap.put(SECOND_COLUMN, article.getArticle());
                     hashmap.put(THIRD_COLUMN, article.getSingular());
@@ -114,7 +113,6 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
                         try {
                             json = new JSONObject(wordForDeletion);
                             _singularIdForDeletion = json.getInt("First");
-                            //wordForDeletion = message;
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -128,7 +126,6 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
                     @Override
                     public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                         // When user changed the Text
-                        //listAdapter.getFilter().filter(cs);
                         listView.clearFocus();
                     }
 
@@ -150,17 +147,13 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
                 setContentView(R.layout.failure_layout);
             }
         });
-
-
-
-
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         //Get selected item id
         if (_singularIdForDeletion == null){
-            Toast.makeText(mContext,"Please select an item from the list", Toast.LENGTH_SHORT).show();
+            Snackbar.make(v, getString(R.string.selectFromList), Snackbar.LENGTH_SHORT).show();
         } else {
             //Call GetPluralsFromSingular from database
             Retrofit retrofit02 = new Retrofit.Builder()
@@ -175,11 +168,11 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
                 public void onResponse(Call<List<PluralsModel>> call, Response<List<PluralsModel>> response) {
                     if (!response.isSuccessful()) {
                         setContentView(R.layout.failure_layout);
-                        Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
+                        Snackbar.make(v, response.message(), Snackbar.LENGTH_SHORT).show();
                         return;
                     }
                     _pluralsOfSingular = response.body();
-                    Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, response.message(), Snackbar.LENGTH_SHORT).show();
 
                     //Foreach plural in list, call delete plural
                     for (PluralsModel pluralFromList : _pluralsOfSingular) {
@@ -190,10 +183,10 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
                             public void onResponse(Call<String> call02, Response<String> response) {
                                 if (!response.isSuccessful()) {
                                     setContentView(R.layout.failure_layout);
-                                    Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(v, response.message(), Snackbar.LENGTH_SHORT).show();
                                     return;
                                 }
-                                Toast.makeText(mContext, response.body(), Toast.LENGTH_SHORT).show();
+                                Snackbar.make(v, response.body(), Snackbar.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -203,7 +196,6 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
                         });
                     }
 
-
                     //Call delete singular word from Database
                     Call<String> call03 = _jsonPlaceHolderApi.DeleteSingular(_singularIdForDeletion);
 
@@ -212,10 +204,10 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
                         public void onResponse(Call<String> call03, Response<String> response) {
                             if (!response.isSuccessful()) {
                                 setContentView(R.layout.failure_layout);
-                                Toast.makeText(mContext, response.message(), Toast.LENGTH_SHORT).show();
+                                Snackbar.make(v, response.message(), Snackbar.LENGTH_SHORT).show();
                                 return;
                             }
-                            Toast.makeText(mContext, response.body() + " from Singulars", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(v, response.body() + " " + getString(R.string.fromSingulars), Snackbar.LENGTH_SHORT).show();
                         }
 
                         @Override
@@ -272,7 +264,7 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
                         try {
                             json = new JSONObject(wordForDeletion);
                             _singularIdForDeletion = json.getInt("First");
-                            //wordForDeletion = message;
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -286,7 +278,6 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
                     @Override
                     public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                         // When user changed the Text
-                        //listAdapter.getFilter().filter(cs);
                         listView.clearFocus();
                     }
 

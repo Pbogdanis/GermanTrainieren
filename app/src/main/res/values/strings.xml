@@ -28,4 +28,6 @@
     <string name="correct">Correct!</string>
     <string name="wrong">Wrong! The correct article is </string>
     <string name="over">The quiz is over!</string>
+    <string name="fromSingulars">from Singulars</string>
+    <string name="selectFromList">Please select an item from the list</string>
 </resources>
