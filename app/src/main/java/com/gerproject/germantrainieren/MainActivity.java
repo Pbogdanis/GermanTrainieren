@@ -1,7 +1,6 @@
 package com.gerproject.germantrainieren;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
 import android.content.Context;

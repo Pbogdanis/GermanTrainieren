@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.List;
 
 import Models.PluralsModel;
@@ -22,7 +24,6 @@ import static Helpers.RandomIndex.getRandomNumberInRange;
 
 public class Plurals extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView _question_txt;
     private String _next_plural;
     private int _random_index;
     private EditText _answer_txt;
@@ -37,7 +38,6 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plurals_layout);
 
-        _question_txt = findViewById(R.id.question_txt);
         _answer_txt = findViewById(R.id.answer_txt);
         _pluralFromList = findViewById(R.id.pluralFromList);
 
@@ -76,10 +76,10 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
 
         _isCorrect = false;
         _answer = _answer_txt.getText().toString();
-        //_allPluralsArray = new ArrayList<String>();
+
         if(!_allPlurals.isEmpty()){
             if (_answer.isEmpty()){
-                Toast.makeText(this, "Please select an answer", Toast.LENGTH_SHORT).show();
+                Snackbar.make(v, getString(R.string.selectAnAnswer), Snackbar.LENGTH_SHORT).show();
             } else {
 
                 //Check for correct answer//
@@ -88,9 +88,9 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
                 }
 
                 if(_isCorrect){
-                    Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, getString(R.string.correct), Snackbar.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Wrong! The correct plural is " +  _allPlurals.get(_random_index).getPlural(), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, getString(R.string.wrongPlural) + " " +  _allPlurals.get(_random_index).getPlural(), Snackbar.LENGTH_SHORT).show();
                 }
 
                 //Remove word from list//
@@ -106,9 +106,7 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
                     _answer_txt.setText("");
                 } else {
                     //Close activity and show MainActivity
-                    toastMsg = Toast.makeText(this, "The quiz is over!", Toast.LENGTH_SHORT);
-                    toastMsg.setGravity(Gravity.TOP| Gravity.CENTER, 0, 0);
-                    toastMsg.show();
+                    Snackbar.make(v, getString(R.string.over), Snackbar.LENGTH_SHORT).show();
 
                     finish();
                 }

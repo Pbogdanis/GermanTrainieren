@@ -84,7 +84,7 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
         if( _allArticles.get(_random_index).getArticle().equalsIgnoreCase(_btnPressedTxt) ){
             Snackbar.make(v, getString(R.string.correct), Snackbar.LENGTH_SHORT).show();
         } else {
-            Snackbar.make(v, getString(R.string.wrong)+ " " + _allArticles.get(_random_index).getArticle(), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(v, getString(R.string.wrongArticle)+ " " + _allArticles.get(_random_index).getArticle(), Snackbar.LENGTH_SHORT).show();
         }
 
         //Remove word from list//

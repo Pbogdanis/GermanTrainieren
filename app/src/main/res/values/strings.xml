@@ -26,8 +26,11 @@
     <string name="signin">Sign In</string>
     <string name="cancel">Cancel</string>
     <string name="correct">Correct!</string>
-    <string name="wrong">Wrong! The correct article is </string>
+    <string name="wrongArticle">Wrong! The correct article is</string>
     <string name="over">The quiz is over!</string>
     <string name="fromSingulars">from Singulars</string>
     <string name="selectFromList">Please select an item from the list</string>
+    <string name="wrongPlural">Wrong! The correct plural is</string>
+    <string name="selectAnAnswer">Please select an answer</string>
+
 </resources>
