@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import Helpers.BasicAuthInterceptor;
 import Helpers.ListViewAdapter;
@@ -57,6 +58,9 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
         //Authentication client
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new BasicAuthInterceptor(username, password))
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -86,7 +90,6 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
                     return;
                 }
                 _allArticles = response.body();
-
 
                 list=new ArrayList<>();
 
