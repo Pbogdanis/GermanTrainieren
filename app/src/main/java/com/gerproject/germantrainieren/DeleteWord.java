@@ -38,6 +38,7 @@ import static Helpers.ListViewAdapter.SECOND_COLUMN;
 import static Helpers.ListViewAdapter.THIRD_COLUMN;
 import static com.gerproject.germantrainieren.MainActivity.mContext;
 import static com.gerproject.germantrainieren.MainActivity.password;
+import static com.gerproject.germantrainieren.MainActivity.refreshBtns;
 import static com.gerproject.germantrainieren.MainActivity.username;
 
 
@@ -69,6 +70,8 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
                 .build();
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         _jsonPlaceHolderApi = jsonPlaceHolderApi;
+
+        refreshBtns();
     }
 
     @Override

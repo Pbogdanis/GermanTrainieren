@@ -1,8 +1,11 @@
 package com.gerproject.germantrainieren;
 
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -23,6 +26,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import static com.gerproject.germantrainieren.MainActivity.mContext;
+import static com.gerproject.germantrainieren.MainActivity.refreshBtns;
 
 public class Articles extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,6 +38,7 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
     private JsonPlaceHolderApi _jsonPlaceHolderApi;
     private Button _nextQst, _answerBtn, _correctIfFalse, _derBtn, _dieBtn, _dasBtn;
     private Button[] _articleBtnList;
+    private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
 
     public Articles(){
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
@@ -49,6 +54,8 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
 
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         _jsonPlaceHolderApi = jsonPlaceHolderApi;
+
+        refreshBtns();
     }
 
 
@@ -89,6 +96,32 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
                 setContentView(R.layout.failure_layout);
             }
         });
+
+        ((Button)findViewById(R.id.nextQuestion)).setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN: {
+                        Button view = (Button) v;
+                        view.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                        v.invalidate();
+                        break;
+                    }
+                    case MotionEvent.ACTION_UP:
+                        // Your action here on button click
+                        //Call Next Question method
+                        onNextQuestion(v);
+                    case MotionEvent.ACTION_CANCEL: {
+                        Button view = (Button) v;
+                        view.getBackground().clearColorFilter();
+                        view.invalidate();
+                        break;
+                    }
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -107,16 +140,17 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
                 _btnPressedTxt = getString(R.string.dastxt);
                 checkAnswer(v);
                 break;
-            case R.id.nextQuestion:
+            /*case R.id.nextQuestion:
                 //Call Next Question method
                 onNextQuestion(v);
-                break;
+                break;*/
         }
 
 
     }
 
     public void onNextQuestion(View v){
+
         //Remove word from list
         _allArticles.remove(_allArticles.get(_random_index));
 
@@ -138,6 +172,7 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
 
             finish();
         }
+
     }
 
     public void checkAnswer(View v){

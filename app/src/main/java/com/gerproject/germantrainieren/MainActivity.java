@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+
+import java.util.ArrayList;
 
 import Helpers.DialogBuilder;
 
@@ -24,7 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static SharedPreferences.Editor editor;
     public static DialogFragment newDialog;
     public static String username, password;
-
+    private static Button _articlesBtn, _pluralsBtn, _saveBtn, _deleteBtn;
+    private static Button[] _btnList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +37,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mContext = this;
         sharedPref = this.getPreferences(Context.MODE_PRIVATE);
 
+        _articlesBtn = findViewById(R.id.article_btn);
+        _pluralsBtn = findViewById(R.id.plurals_btn);
+        _saveBtn = findViewById(R.id.saveBtn);
+        _deleteBtn = findViewById(R.id.delete_btn);
+
     }
 
+    public static void refreshBtns(){
+        _btnList = new Button[4];
+        _btnList[0] = _articlesBtn;
+        _btnList[1] = _pluralsBtn;
+        _btnList[2] = _saveBtn;
+        _btnList[3] = _deleteBtn;
+
+        for (Button articleBtn : _btnList) {
+            articleBtn.setBackground(mContext.getResources().getDrawable(R.drawable.buttonshape));
+        }
+    }
 
     @Override
     public void onClick(View v) {
 
+        v.setBackground(getResources().getDrawable(R.drawable.buttonshapeclicked));
         switch (v.getId()) {
 
             //new "play with articles" activity

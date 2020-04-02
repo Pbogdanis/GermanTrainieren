@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/black"
     tools:context=".Articles">
 
     <androidx.constraintlayout.widget.Guideline
@@ -19,21 +19,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.35" />
+        app:layout_constraintGuide_percent="0.25" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.45" />
+        app:layout_constraintGuide_percent="0.4" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.55" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline14"
@@ -68,36 +68,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="139dp" />
 
     <TextView
         android:id="@+id/question_txt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeStepGranularity="2sp"
         android:gravity="center"
         android:text="@string/playWithArticlesPlaceholder"
-        android:textColor="@color/black"
-        android:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <TextView
         android:id="@+id/wordFromList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toTopOf="@+id/guideline8" />
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#000000"
-        app:layout_constraintTop_toBottomOf="@+id/wordFromList" />
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/guideline17" />
 
     <Button
         android:id="@+id/derBtn"
@@ -105,6 +118,7 @@
         android:layout_height="wrap_content"
         android:text="@string/derTxt"
         android:onClick="onClick"
+        android:textColor="@color/white"
         android:background="@drawable/buttonshape"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
@@ -116,6 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dieTxt"
+        android:textColor="@color/white"
         android:onClick="onClick"
         android:background="@drawable/buttonshape"
         app:layout_constraintBottom_toTopOf="@+id/guideline13"
@@ -128,6 +143,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dastxt"
+        android:textColor="@color/white"
         android:onClick="onClick"
         android:background="@drawable/buttonshape"
         app:layout_constraintBottom_toTopOf="@+id/guideline14"
@@ -140,12 +156,14 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="@string/nextQst"
+        android:textColor="@color/white"
+        android:background="@drawable/buttonshape"
         app:layout_constraintBottom_toTopOf="@+id/guideline16"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toTopOf="@+id/guideline14"
         android:visibility="invisible"
-        android:onClick="onClick"/>
+        android:onClick="onClick" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

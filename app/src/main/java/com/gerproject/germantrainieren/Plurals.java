@@ -26,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static Helpers.RandomIndex.getRandomNumberInRange;
 import static com.gerproject.germantrainieren.MainActivity.mContext;
+import static com.gerproject.germantrainieren.MainActivity.refreshBtns;
 
 public class Plurals extends AppCompatActivity implements View.OnClickListener {
 
@@ -52,6 +53,8 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
 
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         _jsonPlaceHolderApi = jsonPlaceHolderApi;
+
+        refreshBtns();
     }
 
     @Override

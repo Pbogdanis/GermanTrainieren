@@ -38,6 +38,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.gerproject.germantrainieren.MainActivity.password;
+import static com.gerproject.germantrainieren.MainActivity.mContext;
+import static com.gerproject.germantrainieren.MainActivity.refreshBtns;
 import static com.gerproject.germantrainieren.MainActivity.username;
 
 
@@ -51,6 +53,26 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
     private final List<String> _articlesList = new ArrayList<>(Arrays.asList(_article_values));
     private Switch _wordType;
     private Call<String> _call;
+    private JsonPlaceHolderApi _jsonPlaceHolderApi;
+
+    public SaveNewWord(){
+        //Authentication client
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new BasicAuthInterceptor(username, password))
+                .build();
+
+        //Make post call to API
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(mContext.getResources().getString(R.string.api_url))
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        _jsonPlaceHolderApi = jsonPlaceHolderApi;
+
+        refreshBtns();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,21 +169,6 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
         String _new_singular_value = _new_singular.getText().toString();
         String _new_plural_value = _new_plural.getText().toString();
 
-
-
-        //Authentication client
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new BasicAuthInterceptor(username, password))
-                .build();
-
-        //Make post call to API
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getResources().getString(R.string.api_url))
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        JsonPlaceHolderApi _jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
         //Check if all values have been inserted
         //Singular
