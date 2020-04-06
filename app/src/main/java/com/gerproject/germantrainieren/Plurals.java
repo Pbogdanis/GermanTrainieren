@@ -1,14 +1,22 @@
 package com.gerproject.germantrainieren;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -25,6 +33,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static Helpers.RandomIndex.getRandomNumberInRange;
+import static android.app.PendingIntent.getActivity;
 import static com.gerproject.germantrainieren.MainActivity.mContext;
 import static com.gerproject.germantrainieren.MainActivity.refreshBtns;
 
@@ -38,8 +47,12 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
     private TextView _pluralFromList;
     private List<PluralsModel> _allPlurals;
     private JsonPlaceHolderApi _jsonPlaceHolderApi;
+    private Activity _activity;
 
     public Plurals(){
+
+        _activity = this;
+
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
@@ -100,47 +113,83 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
         CoordinatorLayout.LayoutParams params=(CoordinatorLayout.LayoutParams)view.getLayoutParams();
         params.gravity = Gravity.TOP;
         view.setLayoutParams(params);
-        //snackbar.show();
 
         if(!_allPlurals.isEmpty()){
             if (_answer.isEmpty()){
-                snack = Snackbar.make(coordinatorLayout, getString(R.string.selectAnAnswer), Snackbar.LENGTH_SHORT);
-                snack.show();
+                ShowDialog(getString(R.string.selectAnAnswer));
             } else {
-
                 //Check for correct answer//
                 if ( _allPlurals.get(_random_index).getPlural().equalsIgnoreCase(_answer)){
                     _isCorrect = true;
                 }
 
                 if(_isCorrect){
-                    snack = Snackbar.make(coordinatorLayout, getString(R.string.correct), Snackbar.LENGTH_SHORT);
-                    snack.show();
+                    ShowDialog(getString(R.string.correct));
                 } else {
-                    snack = Snackbar.make(coordinatorLayout, getString(R.string.wrongPlural) + " " +  _allPlurals.get(_random_index).getPlural(), Snackbar.LENGTH_SHORT);
-                    snack.show();
+                    ShowDialog(getString(R.string.wrongPlural) + " " +  _allPlurals.get(_random_index).getPlural());
                 }
-
-                //Remove word from list//
-                _allPlurals.remove(_allPlurals.get(_random_index));
-
-                //Update view
-                if(!_allPlurals.isEmpty()){
-                    //Generate new random index
-                    _random_index = getRandomNumberInRange(0, _allPlurals.size() - 1);
-                    //Update view
-                    _next_plural = _allPlurals.get(_random_index).getSingular();
-                    _pluralFromList.setText(_next_plural);
-                    _answer_txt.setText("");
-                } else {
-                    //Close activity and show MainActivity
-                    snack = Snackbar.make(coordinatorLayout, getString(R.string.over), Snackbar.LENGTH_SHORT);
-                    snack.show();
-
-                    finish();
-                }
-
             }
+        }
+    }
+
+    private void ShowDialog(String stringMsg) {
+        try {
+
+            final Dialog dialog = new Dialog(_activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.dialogtextview);
+
+            TextView message = dialog.findViewById(R.id.text_dialog);
+            message.setText(stringMsg);
+
+            Button okButton = dialog.findViewById(R.id.ok);
+
+            okButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    dialog.dismiss();
+                    if(!_answer.isEmpty()){
+                        refreshList();
+                    }
+                }
+            });
+            dialog.show();
+
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);//Controlling width and height.
+
+            //Align OK button in the center of the dialog
+            okButton.setTextAppearance(mContext, R.style.DialogCustomTextView);
+            ConstraintLayout.LayoutParams neutralButtonLL = (ConstraintLayout.LayoutParams) okButton.getLayoutParams();
+            neutralButtonLL.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            okButton.setLayoutParams(neutralButtonLL);
+
+            //Changing dialog message appearance
+            message.setGravity(Gravity.CENTER);
+            message.setTextAppearance(mContext, R.style.DialogCustomTextView);
+        }
+        catch (Exception e){
+            Toast.makeText(mContext,"Error in showDialog",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void refreshList(){
+        //Remove word from list//
+        _allPlurals.remove(_allPlurals.get(_random_index));
+
+        //Update view
+        if(!_allPlurals.isEmpty()){
+            //Generate new random index
+            _random_index = getRandomNumberInRange(0, _allPlurals.size() - 1);
+            //Update view
+            _next_plural = _allPlurals.get(_random_index).getSingular();
+            _pluralFromList.setText(_next_plural);
+            _answer_txt.setText("");
+        } else {
+            ShowDialog(getString(R.string.over));
+            finish();
         }
     }
 }
