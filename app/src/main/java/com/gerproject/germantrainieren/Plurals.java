@@ -21,6 +21,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -75,6 +76,7 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plurals_layout);
 
+        _allPlurals = new ArrayList<>();
         _answer_txt = findViewById(R.id.answer_txt);
         _pluralFromList = findViewById(R.id.pluralFromList);
 
@@ -129,6 +131,9 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
                     ShowDialog(getString(R.string.wrongPlural) + " " +  _allPlurals.get(_random_index).getPlural());
                 }
             }
+        }
+        else {
+            Snackbar.make(v, getString(R.string.waitForServer), Snackbar.LENGTH_SHORT).show();
         }
     }
 

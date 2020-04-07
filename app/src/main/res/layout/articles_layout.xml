@@ -96,14 +96,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="146dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="582dp" />
+        app:layout_constraintGuide_percent="0.2" />
 
     <TextView
         android:id="@+id/question_txt"
@@ -141,8 +134,9 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="2dp"
         android:background="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/guideline17" />
+        app:layout_constraintTop_toTopOf="@+id/guideline26" />
 
     <Button
         android:id="@+id/derBtn"

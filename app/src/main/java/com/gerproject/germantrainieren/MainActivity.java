@@ -97,8 +97,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void showDialog() {
-        newDialog = new DialogBuilder();
-        newDialog.show(getSupportFragmentManager(),"Dialog");
+        //newDialog = new DialogBuilder();
+        //newDialog.show(getSupportFragmentManager(),"Dialog");
+        new DialogBuilder().ShowDialog(this);
     }
 
     public static void dismissDialog(){
