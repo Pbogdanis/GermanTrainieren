@@ -8,6 +8,7 @@ import android.content.Intent;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.view.View;
 import android.widget.Button;
 
@@ -99,7 +100,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void showDialog() {
         //newDialog = new DialogBuilder();
         //newDialog.show(getSupportFragmentManager(),"Dialog");
-        new DialogBuilder().ShowDialog(this);
+        //new DialogBuilder().ShowDialog(this);
+        intent = new Intent(this, Helpers.CustomDialog.class);
+        startAc();
     }
 
     public static void dismissDialog(){

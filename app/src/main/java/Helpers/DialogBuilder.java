@@ -133,7 +133,7 @@ public class DialogBuilder {
             final EditText txtPwd = dialog.findViewById(R.id.password);
 
             Button signinButton = dialog.findViewById(R.id.signin);
-            Button cancelButton = dialog.findViewById(R.id.signin);
+            Button cancelButton = dialog.findViewById(R.id.cancel);
 
             cancelButton.setOnClickListener(new View.OnClickListener()
             {

@@ -36,6 +36,10 @@
             android:name=".DeleteWord"
             android:label="@string/delete">
         </activity>
+        <activity
+            android:name="Helpers.CustomDialog"
+            android:theme="@android:style/Theme.Holo.Dialog">
+        </activity>
 
     </application>
 
