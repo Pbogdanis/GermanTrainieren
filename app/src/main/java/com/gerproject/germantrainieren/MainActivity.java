@@ -12,12 +12,8 @@ import android.provider.SyncStateContract;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.ArrayList;
-
-import Helpers.DialogBuilder;
-
-import static Helpers.DialogBuilder._password;
-import static Helpers.DialogBuilder._username;
+import static Helpers.CustomDialog._password;
+import static Helpers.CustomDialog._username;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -98,11 +94,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void showDialog() {
-        //newDialog = new DialogBuilder();
-        //newDialog.show(getSupportFragmentManager(),"Dialog");
-        //new DialogBuilder().ShowDialog(this);
-        intent = new Intent(this, Helpers.CustomDialog.class);
-        startAc();
+                Intent dialogIntent = new Intent(this, Helpers.CustomDialog.class);
+        this.startActivity(dialogIntent);
     }
 
     public static void dismissDialog(){
