@@ -3,7 +3,7 @@
     <string name="articles">Play with articles</string>
     <string name="plurals">Play with plurals</string>
     <string name="edit_list">Edit yout List</string>
-    <string name="save">Save new word</string>
+    <string name="save">Save</string>
     <string name="delete">Delete existing word</string>
     <string name="new_article">Enter an article</string>
     <string name="new_singular">Enter the singular</string>

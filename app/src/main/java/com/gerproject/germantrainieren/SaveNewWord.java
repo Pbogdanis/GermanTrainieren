@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -46,14 +47,15 @@ import static com.gerproject.germantrainieren.MainActivity.username;
 public class SaveNewWord extends AppCompatActivity implements View.OnClickListener {
 
     private EditText _new_singular, _new_plural;
-    private Spinner _new_article;
+    //private Spinner _new_article;
     private String _new_article_value;
-    private Boolean saveIsValid = false;
-    private String[] _article_values = new String[]{"Choose the article","der","die","das"};
+    private Boolean saveIsValid = false, _isPlural;
+    private String[] _article_values = new String[]{"Choose the article","DER","DIE","DAS"};
     private final List<String> _articlesList = new ArrayList<>(Arrays.asList(_article_values));
-    private Switch _wordType;
+    //private Switch _wordType;
     private Call<String> _call;
     private JsonPlaceHolderApi _jsonPlaceHolderApi;
+    private Button _singularSave, _pluralSave, _derBtn, _dieBtn, _dasBtn;
 
     public SaveNewWord(){
         //Authentication client
@@ -80,13 +82,19 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.save_new_word_layout);
 
         //Get Items from the layout
-        _new_article = findViewById(R.id.new_article);
+        //_new_article = findViewById(R.id.art);
+        _singularSave = findViewById(R.id.singularSave);
+        _pluralSave = findViewById(R.id.pluralSave);
+        _derBtn = findViewById(R.id.derBtn);
+        _dieBtn = findViewById(R.id.dieBtn);
+        _dasBtn = findViewById(R.id.dasBtn);
+
         _new_singular = findViewById(R.id.new_singular);
         _new_plural = findViewById(R.id.new_plural);
         _new_article_value = "";
-        _wordType = findViewById(R.id.wordType);
+       // _wordType = findViewById(R.id.wordType);
 
-        _wordType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        /*_wordType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //Singular
                 if(!isChecked){
@@ -105,7 +113,7 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
                 }
             }
         });
-
+*/
 
 
         // Initializing an ArrayAdapter
@@ -134,14 +142,14 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
                     tv.setTextColor(Color.GRAY);
                 }
                 else {
-                    tv.setTextColor(Color.BLACK);
+                    tv.setTextColor(Color.WHITE);
                 }
                 return view;
             }
         };
 
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
-        _new_article.setAdapter(spinnerArrayAdapter);
+       /* _new_article.setAdapter(spinnerArrayAdapter);
 
         _new_article.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -159,20 +167,24 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
             public void onNothingSelected(AdapterView<?> parent) {
                 _new_article_value = "";
             }
-        });
+        });*/
 
     }
 
     @Override
     public void onClick(View v) {
+        _isPlural = false;
+        SetSingularOrPlural(v);
+        if(!_isPlural){
+            SetArticle(v);
+        }
 
         String _new_singular_value = _new_singular.getText().toString();
         String _new_plural_value = _new_plural.getText().toString();
 
-
         //Check if all values have been inserted
         //Singular
-        if(!_wordType.isChecked()){
+        if(!_isPlural){
             if(!_new_article_value.isEmpty() &&
                     !_new_singular_value.isEmpty()){
                 saveIsValid = true;
@@ -222,5 +234,53 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
             });
         }
         saveIsValid = false;
+    }
+
+    private void SetSingularOrPlural(View v){
+        if(v.getId()==R.id.singularSave){
+            _singularSave.setBackground(mContext.getDrawable(R.drawable.buttonshapegreen));
+            _pluralSave.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+            _isPlural = false;
+            _new_plural.setClickable(false);
+            _derBtn.setClickable(true);
+            _dieBtn.setClickable(true);
+            _dasBtn.setClickable(true);
+            _derBtn.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+            _dieBtn.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+            _dasBtn.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+        } else if (v.getId()==R.id.pluralSave){
+            _singularSave.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+            _pluralSave.setBackground(mContext.getDrawable(R.drawable.buttonshapegreen));
+            _isPlural = true;
+            _derBtn.setClickable(false);
+            _dieBtn.setClickable(false);
+            _dasBtn.setClickable(false);
+            _derBtn.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+            _dieBtn.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+            _dasBtn.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+        }
+    }
+
+    private void SetArticle(View v){
+        switch (v.getId()){
+            case R.id.derBtn:
+                _derBtn.setBackground(mContext.getDrawable(R.drawable.buttonshapegreen));
+                _dieBtn.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+                _dasBtn.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+                _new_article_value = _derBtn.getText().toString().toLowerCase();
+                break;
+            case R.id.dieBtn:
+                _derBtn.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+                _dieBtn.setBackground(mContext.getDrawable(R.drawable.buttonshapegreen));
+                _dasBtn.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+                _new_article_value = _dieBtn.getText().toString().toLowerCase();
+                break;
+            case R.id.dasBtn:
+                _derBtn.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+                _dieBtn.setBackground(mContext.getDrawable(R.drawable.buttonshape));
+                _dasBtn.setBackground(mContext.getDrawable(R.drawable.buttonshapegreen));
+                _new_article_value = _dasBtn.getText().toString().toLowerCase();
+                break;
+        }
     }
 }
