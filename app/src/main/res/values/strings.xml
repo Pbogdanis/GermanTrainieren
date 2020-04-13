@@ -3,7 +3,7 @@
     <string name="articles">Play with articles</string>
     <string name="plurals">Play with plurals</string>
     <string name="edit_list">Edit yout List</string>
-    <string name="save">Save</string>
+    <string name="save">Save a new word</string>
     <string name="delete">Delete existing word</string>
     <string name="new_article">Enter an article</string>
     <string name="new_singular">Enter the singular</string>
@@ -34,6 +34,7 @@
     <string name="selectAnAnswer">Please select an answer</string>
     <string name="wrongCreds">Wrong credentials!</string>
     <string name="waitForServer">Please wait for server response</string>
+    <string name="allValues">You must enter all the values</string>
     <string name="nextQst">NEXT</string>
     <string name="OK">OK</string>
 </resources>

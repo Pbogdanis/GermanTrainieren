@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void showDialog() {
-                Intent dialogIntent = new Intent(this, Helpers.CustomDialog.class);
+        Intent dialogIntent = new Intent(this, Helpers.CustomDialog.class);
         this.startActivity(dialogIntent);
     }
 

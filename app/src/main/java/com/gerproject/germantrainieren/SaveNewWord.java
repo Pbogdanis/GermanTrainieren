@@ -2,8 +2,10 @@ package com.gerproject.germantrainieren;
 
 import android.app.AlertDialog;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -172,7 +176,7 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         _isPlural = false;
         SetSingularOrPlural(v);
         if(!_isPlural){
@@ -213,8 +217,42 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
             }
         }
 
+        if(v.getId() == R.id.new_word_save){
+
+            //Animation on button click
+            ((Button)findViewById(R.id.new_word_save)).setOnTouchListener(new View.OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN: {
+                            Button view = (Button) v;
+                            view.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                            v.invalidate();
+                            break;
+                        }
+                        case MotionEvent.ACTION_UP:
+                            // Your action here on button click
+                            //Call Next Question method
+                            onSave(v);
+                        case MotionEvent.ACTION_CANCEL: {
+                            Button view = (Button) v;
+                            view.getBackground().clearColorFilter();
+                            view.invalidate();
+                            break;
+                        }
+                    }
+                    return true;
+                }
+            });
+
+
+        }
+    }
+
+    private void onSave(final View v){
         if(!saveIsValid){
-            Toast.makeText(this, "You must enter all the values", Toast.LENGTH_SHORT).show();
+            Snackbar.make(v, getString(R.string.allValues), Snackbar.LENGTH_SHORT).show();
         } else {
 
             _call.enqueue(new Callback<String>() {
@@ -223,7 +261,7 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
                     if(!response.isSuccessful()){
                         setContentView(R.layout.failure_layout);
                     } else {
-                        Toast.makeText(getApplicationContext(), response.body() , Toast.LENGTH_SHORT).show();
+                        Snackbar.make(v, response.body(), Snackbar.LENGTH_SHORT).show();
                     }
                 }
 
@@ -241,7 +279,7 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
             _singularSave.setBackground(mContext.getDrawable(R.drawable.buttonshapegreen));
             _pluralSave.setBackground(mContext.getDrawable(R.drawable.buttonshape));
             _isPlural = false;
-            _new_plural.setClickable(false);
+            _new_plural.setEnabled(false);
             _derBtn.setClickable(true);
             _dieBtn.setClickable(true);
             _dasBtn.setClickable(true);
@@ -252,6 +290,7 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
             _singularSave.setBackground(mContext.getDrawable(R.drawable.buttonshape));
             _pluralSave.setBackground(mContext.getDrawable(R.drawable.buttonshapegreen));
             _isPlural = true;
+            _new_plural.setEnabled(true);
             _derBtn.setClickable(false);
             _dieBtn.setClickable(false);
             _dasBtn.setClickable(false);
