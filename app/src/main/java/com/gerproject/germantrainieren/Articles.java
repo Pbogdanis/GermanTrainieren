@@ -140,13 +140,7 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
                 _btnPressedTxt = getString(R.string.dastxt);
                 checkAnswer(v);
                 break;
-            /*case R.id.nextQuestion:
-                //Call Next Question method
-                onNextQuestion(v);
-                break;*/
         }
-
-
     }
 
     public void onNextQuestion(View v){
@@ -180,12 +174,9 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
 
         if(!_allArticles.isEmpty()){
             if( _allArticles.get(_random_index).getArticle().equalsIgnoreCase(_btnPressedTxt) ){
-                //Snackbar.make(v, getString(R.string.correct), Snackbar.LENGTH_SHORT).show();
                 //Change answerBtn color to green
-                //_answerBtn.setBackgroundColor(getResources().getColor(R.color.greenCorrect));
                 _answerBtn.setBackground(getResources().getDrawable(R.drawable.buttonshapegreen));
             } else {
-                //Snackbar.make(v, getString(R.string.wrongArticle)+ " " + _allArticles.get(_random_index).getArticle(), Snackbar.LENGTH_SHORT).show();
                 //Change answerBtn color to red
                 _answerBtn.setBackground(getResources().getDrawable(R.drawable.buttonshapered));
                 for (Button correctBtn : _articleBtnList) {
@@ -195,9 +186,7 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
                         break;
                     }
                 }
-
             }
-
             //Enable NEXT btn
             _nextQst.setVisibility(View.VISIBLE);
 
@@ -205,5 +194,4 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
             Snackbar.make(v, getString(R.string.waitForServer), Snackbar.LENGTH_SHORT).show();
         }
     }
-
 }

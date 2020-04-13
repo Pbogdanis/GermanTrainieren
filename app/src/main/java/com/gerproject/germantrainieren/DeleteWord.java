@@ -8,12 +8,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -128,6 +130,20 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
                     }
                 });
 
+                listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+
+                    @Override
+                    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                    }
+
+                    @Override
+                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                        listView.getSelector().setAlpha(0);
+                        _singularIdForDeletion = null;
+                    }
+                });
                 filter.addTextChangedListener(new TextWatcher() {
 
                     @Override

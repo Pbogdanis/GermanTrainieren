@@ -56,18 +56,6 @@ public class CustomDialog extends Activity implements View.OnClickListener {
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
         getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-        /*//Change layout size
-        View view = findViewById(R.id.layout);
-        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.height = height/2;
-        view.setLayoutParams(layoutParams);*/
-
-        //Align OK button in the center of the dialog
-        /*signinButton.setTextAppearance(mContext, R.style.DialogCustomTextView);
-        ConstraintLayout.LayoutParams neutralButtonLL = (ConstraintLayout.LayoutParams) signinButton.getLayoutParams();
-        neutralButtonLL.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-        signinButton.setLayoutParams(neutralButtonLL);*/
     }
 
     @Override
@@ -160,15 +148,36 @@ public class CustomDialog extends Activity implements View.OnClickListener {
                                         //TODO: Run when animation repeat
                                     }
                                 });
-
-
-
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Boolean> call, Throwable t) {
-                            //Not successfull
+                            //Not successful
+                            AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 1.0f);
+                            alphaAnimation.setDuration(1000);
+                            alphaAnimation.setRepeatCount(Animation.ABSOLUTE);
+                            alphaAnimation.setRepeatMode(Animation.RESTART);
+                            final View someView = findViewById(R.id.layout);
+                            someView.startAnimation(alphaAnimation);
+
+                            alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
+
+                                    someView.setBackground(getResources().getDrawable(R.drawable.dialog_textview_border_red));
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    someView.setBackground(getResources().getDrawable(R.drawable.dialog_textview_border));
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+                                    //TODO: Run when animation repeat
+                                }
+                            });
                             isAuth = false;
                         }
                     });
@@ -199,7 +208,6 @@ public class CustomDialog extends Activity implements View.OnClickListener {
                         }
                     });
                 }
-
                 break;
         }
     }
