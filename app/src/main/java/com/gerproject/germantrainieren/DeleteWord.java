@@ -1,11 +1,15 @@
 package com.gerproject.germantrainieren;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -152,84 +156,108 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
         });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onClick(final View v) {
-        //Get selected item id
-        if (_singularIdForDeletion == null){
-            Snackbar.make(v, getString(R.string.selectFromList), Snackbar.LENGTH_SHORT).show();
-        } else {
-            //Call GetPluralsFromSingular from database
-            Retrofit retrofit02 = new Retrofit.Builder()
-                    .baseUrl(mContext.getResources().getString(R.string.api_url))
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            JsonPlaceHolderApi jsonPlaceHolderApi02 = retrofit02.create(JsonPlaceHolderApi.class);
-            Call<List<PluralsModel>> call = jsonPlaceHolderApi02.GetPluralsOfSingular(_singularIdForDeletion);
+        //Animation on button click
+        ((Button)findViewById(R.id.delete_word)).setOnTouchListener(new View.OnTouchListener() {
 
-            call.enqueue(new Callback<List<PluralsModel>>() {
-                @Override
-                public void onResponse(Call<List<PluralsModel>> call, Response<List<PluralsModel>> response) {
-                    if (!response.isSuccessful()) {
-                        setContentView(R.layout.failure_layout);
-                        Snackbar.make(v, response.message(), Snackbar.LENGTH_SHORT).show();
-                        return;
+            @Override
+            public boolean onTouch(final View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN: {
+                        Button view = (Button) v;
+                        view.getBackground().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                        v.invalidate();
+                        break;
                     }
-                    _pluralsOfSingular = response.body();
-                    Snackbar.make(v, response.message(), Snackbar.LENGTH_SHORT).show();
+                    case MotionEvent.ACTION_UP:
+                        // Your action here on button click
+                        //Get selected item id
+                        if (_singularIdForDeletion == null){
+                            Snackbar.make(v, getString(R.string.selectFromList), Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            //Call GetPluralsFromSingular from database
+                            Retrofit retrofit02 = new Retrofit.Builder()
+                                    .baseUrl(mContext.getResources().getString(R.string.api_url))
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+                            JsonPlaceHolderApi jsonPlaceHolderApi02 = retrofit02.create(JsonPlaceHolderApi.class);
+                            Call<List<PluralsModel>> call = jsonPlaceHolderApi02.GetPluralsOfSingular(_singularIdForDeletion);
 
-                    //Foreach plural in list, call delete plural
-                    for (PluralsModel pluralFromList : _pluralsOfSingular) {
-                        Call<String> call02 = _jsonPlaceHolderApi.DeletePlural(pluralFromList.getId());
-
-                        call02.enqueue(new Callback<String>() {
-                            @Override
-                            public void onResponse(Call<String> call02, Response<String> response) {
-                                if (!response.isSuccessful()) {
-                                    setContentView(R.layout.failure_layout);
+                            call.enqueue(new Callback<List<PluralsModel>>() {
+                                @Override
+                                public void onResponse(Call<List<PluralsModel>> call, Response<List<PluralsModel>> response) {
+                                    if (!response.isSuccessful()) {
+                                        setContentView(R.layout.failure_layout);
+                                        Snackbar.make(v, response.message(), Snackbar.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                    _pluralsOfSingular = response.body();
                                     Snackbar.make(v, response.message(), Snackbar.LENGTH_SHORT).show();
-                                    return;
+
+                                    //Foreach plural in list, call delete plural
+                                    for (PluralsModel pluralFromList : _pluralsOfSingular) {
+                                        Call<String> call02 = _jsonPlaceHolderApi.DeletePlural(pluralFromList.getId());
+
+                                        call02.enqueue(new Callback<String>() {
+                                            @Override
+                                            public void onResponse(Call<String> call02, Response<String> response) {
+                                                if (!response.isSuccessful()) {
+                                                    setContentView(R.layout.failure_layout);
+                                                    Snackbar.make(v, response.message(), Snackbar.LENGTH_SHORT).show();
+                                                    return;
+                                                }
+                                                Snackbar.make(v, response.body(), Snackbar.LENGTH_SHORT).show();
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<String> call02, Throwable t) {
+                                                setContentView(R.layout.failure_layout);
+                                            }
+                                        });
+                                    }
+
+                                    //Call delete singular word from Database
+                                    Call<String> call03 = _jsonPlaceHolderApi.DeleteSingular(_singularIdForDeletion);
+
+                                    call03.enqueue(new Callback<String>() {
+                                        @Override
+                                        public void onResponse(Call<String> call03, Response<String> response) {
+                                            if (!response.isSuccessful()) {
+                                                setContentView(R.layout.failure_layout);
+                                                Snackbar.make(v, response.message(), Snackbar.LENGTH_SHORT).show();
+                                                return;
+                                            }
+                                            Snackbar.make(v, response.body() + " " + getString(R.string.fromSingulars), Snackbar.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<String> call03, Throwable t) {
+                                            setContentView(R.layout.failure_layout);
+                                        }
+                                    });
+
+                                    //RefreshListAdapter after all calls have been executed
+                                    RefreshListAdapter();
                                 }
-                                Snackbar.make(v, response.body(), Snackbar.LENGTH_SHORT).show();
-                            }
 
-                            @Override
-                            public void onFailure(Call<String> call02, Throwable t) {
-                                setContentView(R.layout.failure_layout);
-                            }
-                        });
+                                @Override
+                                public void onFailure(Call<List<PluralsModel>> call, Throwable t) {
+                                    setContentView(R.layout.failure_layout);
+                                }
+                            });
+                        }
+                    case MotionEvent.ACTION_CANCEL: {
+                        Button view = (Button) v;
+                        view.getBackground().clearColorFilter();
+                        view.invalidate();
+                        break;
                     }
-
-                    //Call delete singular word from Database
-                    Call<String> call03 = _jsonPlaceHolderApi.DeleteSingular(_singularIdForDeletion);
-
-                    call03.enqueue(new Callback<String>() {
-                        @Override
-                        public void onResponse(Call<String> call03, Response<String> response) {
-                            if (!response.isSuccessful()) {
-                                setContentView(R.layout.failure_layout);
-                                Snackbar.make(v, response.message(), Snackbar.LENGTH_SHORT).show();
-                                return;
-                            }
-                            Snackbar.make(v, response.body() + " " + getString(R.string.fromSingulars), Snackbar.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onFailure(Call<String> call03, Throwable t) {
-                            setContentView(R.layout.failure_layout);
-                        }
-                    });
-
-                    //RefreshListAdapter after all calls have been executed
-                    RefreshListAdapter();
                 }
-
-                @Override
-                public void onFailure(Call<List<PluralsModel>> call, Throwable t) {
-                    setContentView(R.layout.failure_layout);
-                }
-            });
-
-        }
+                return true;
+            }
+        });
     }
 
     private void RefreshListAdapter(){

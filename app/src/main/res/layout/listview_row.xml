@@ -7,22 +7,36 @@
         android:id="@+id/id"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
-        android:layout_weight="1"
-        android:textColor="@color/black"
-        android:text="@string/id"/>
+        android:layout_weight="0.6"
+        android:textColor="@color/white"
+        android:text="@string/id"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform" />
 
     <TextView
         android:id="@+id/article"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
-        android:layout_weight="1"
-        android:textColor="@color/black"
-        android:text="@string/article"/>
+        android:layout_weight="0.2"
+        android:textColor="@color/white"
+        android:text="@string/article"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"/>
     <TextView
         android:id="@+id/singular"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:textColor="@color/black"
-        android:text="@string/singular"/>
+        android:textColor="@color/white"
+        android:text="@string/singular"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"/>
 </LinearLayout>

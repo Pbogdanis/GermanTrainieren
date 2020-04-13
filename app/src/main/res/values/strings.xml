@@ -5,6 +5,7 @@
     <string name="edit_list">Edit yout List</string>
     <string name="save">Save a new word</string>
     <string name="delete">Delete existing word</string>
+    <string name="deleteSelected">Delete selected word</string>
     <string name="new_article">Enter an article</string>
     <string name="new_singular">Enter the singular</string>
     <string name="new_plural">Enter the plural</string>
