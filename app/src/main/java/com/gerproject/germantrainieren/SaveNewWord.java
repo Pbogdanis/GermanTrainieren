@@ -95,29 +95,6 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
         _new_singular = findViewById(R.id.new_singular);
         _new_plural = findViewById(R.id.new_plural);
         _new_article_value = "";
-       // _wordType = findViewById(R.id.wordType);
-
-        /*_wordType.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //Singular
-                if(!isChecked){
-                    //Enable items
-                    _wordType.setText(R.string.singular);
-                    _new_article.setEnabled(true);
-                    _new_singular.setEnabled(true);
-                    _new_plural.setEnabled(false);
-
-                } else {
-                    //Plural
-                    _wordType.setText(R.string.plural);
-                    _new_article.setEnabled(false);
-                    _new_singular.setEnabled(true);
-                    _new_plural.setEnabled(true);
-                }
-            }
-        });
-*/
-
 
         // Initializing an ArrayAdapter
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
@@ -152,25 +129,6 @@ public class SaveNewWord extends AppCompatActivity implements View.OnClickListen
         };
 
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
-       /* _new_article.setAdapter(spinnerArrayAdapter);
-
-        _new_article.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItemText = (String) parent.getItemAtPosition(position);
-                // If user change the default selection
-                // First item is disable and it is used for hint
-                if(position > 0){
-                    //Save the article chosen
-                    _new_article_value = selectedItemText;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                _new_article_value = "";
-            }
-        });*/
 
     }
 

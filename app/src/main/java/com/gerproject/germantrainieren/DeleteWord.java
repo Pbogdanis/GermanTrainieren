@@ -172,7 +172,6 @@ public class DeleteWord extends AppCompatActivity implements View.OnClickListene
         });
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onClick(final View v) {
         //Animation on button click
