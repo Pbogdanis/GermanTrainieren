@@ -33,12 +33,14 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
 
     private TextView _wordFromList;
     private List<ArticlesModel> _allArticles;
+    private Integer _remainingArticles, _countCorrect, _countFalse;
     private Integer _random_index;
     private String _btnPressedTxt;
     private JsonPlaceHolderApi _jsonPlaceHolderApi;
     private Button _nextQst, _answerBtn, _correctIfFalse, _derBtn, _dieBtn, _dasBtn;
     private Button[] _articleBtnList;
     private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.8F);
+    private TextView _correctValue, _falseValue, _remainingValue;
 
     public Articles(){
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
@@ -69,11 +71,21 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
         _derBtn = findViewById(R.id.derBtn);
         _dieBtn = findViewById(R.id.dieBtn);
         _dasBtn = findViewById(R.id.dasBtn);
+        _correctValue = findViewById(R.id.correctValue);
+        _falseValue = findViewById(R.id.falseValue);
+        _remainingValue = findViewById(R.id.remainingValue);
         _articleBtnList = new Button[3];
         _articleBtnList[0] = _derBtn;
         _articleBtnList[1] = _dieBtn;
         _articleBtnList[2] = _dasBtn;
         _allArticles = new ArrayList<>();
+        //Initialize counters
+        _countCorrect = 0;
+        _countFalse = 0;
+        _remainingArticles = 0;
+        _correctValue.setText(_countCorrect.toString());
+        _falseValue.setText(_countFalse.toString());
+        _remainingValue.setText(_remainingArticles.toString());
 
         Call<List<ArticlesModel>> call = _jsonPlaceHolderApi.GetAllFromArticles();
 
@@ -85,6 +97,8 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
                     return;
                 }
                 _allArticles = response.body();
+                _remainingArticles = _allArticles.size();
+                _remainingValue.setText(_remainingArticles.toString());
 
                 //Do all the code here, after the response//
                 _random_index = RandomIndex.getRandomNumberInRange(0, _allArticles.size() - 1);
@@ -147,7 +161,8 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
 
         //Remove word from list
         _allArticles.remove(_allArticles.get(_random_index));
-
+        _remainingArticles =  _allArticles.size();
+        _remainingValue.setText(_remainingArticles.toString());
         //Update view
         if(!_allArticles.isEmpty()){
             //Generate new random index
@@ -163,7 +178,6 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
         } else {
             //Close activity and show MainActivity
             Snackbar.make(v, getString(R.string.over), Snackbar.LENGTH_SHORT).show();
-
             finish();
         }
 
@@ -176,9 +190,15 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
             if( _allArticles.get(_random_index).getArticle().equalsIgnoreCase(_btnPressedTxt) ){
                 //Change answerBtn color to green
                 _answerBtn.setBackground(getResources().getDrawable(R.drawable.buttonshapegreen));
+                //Update correct counter
+                _countCorrect += 1;
+                _correctValue.setText(_countCorrect.toString());
             } else {
                 //Change answerBtn color to red
                 _answerBtn.setBackground(getResources().getDrawable(R.drawable.buttonshapered));
+                //Update false counter
+                _countFalse += 1;
+                _falseValue.setText(_countFalse.toString());
                 for (Button correctBtn : _articleBtnList) {
                     //Change correctAnswerBtn color to green
                     if (correctBtn.getText().toString().equalsIgnoreCase(_allArticles.get(_random_index).getArticle())){

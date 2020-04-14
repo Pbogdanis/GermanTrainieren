@@ -40,6 +40,8 @@
         android:autoSizeMinTextSize="12sp"
         android:autoSizeMaxTextSize="30sp"
         android:autoSizeStepGranularity="1sp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline5"

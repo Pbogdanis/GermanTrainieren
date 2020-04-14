@@ -38,4 +38,7 @@
     <string name="allValues">You must enter all the values</string>
     <string name="nextQst">NEXT</string>
     <string name="OK">OK</string>
+    <string name="correctLabel">Correct:</string>
+    <string name="falseLabel">False:</string>
+    <string name="remainingLabel">Remaining:</string>
 </resources>
