@@ -276,7 +276,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="@string/correctLabel"
-        android:autoSizeMaxTextSize="15sp"
+        android:autoSizeMaxTextSize="20sp"
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
@@ -292,7 +292,7 @@
         android:id="@+id/correctValue"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:autoSizeMaxTextSize="15sp"
+        android:autoSizeMaxTextSize="20sp"
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
@@ -300,7 +300,7 @@
         android:singleLine="true"
         android:textColor="@color/greenCorrect"
         app:layout_constraintBottom_toTopOf="@+id/guideline52"
-        app:layout_constraintEnd_toStartOf="@+id/guideline48"
+        app:layout_constraintEnd_toStartOf="@+id/guideline49"
         app:layout_constraintStart_toStartOf="@+id/guideline11"
         app:layout_constraintTop_toTopOf="@+id/guideline26" />
 
@@ -309,7 +309,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="@string/falseLabel"
-        android:autoSizeMaxTextSize="15sp"
+        android:autoSizeMaxTextSize="20sp"
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
@@ -325,7 +325,7 @@
         android:id="@+id/falseValue"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:autoSizeMaxTextSize="15sp"
+        android:autoSizeMaxTextSize="20sp"
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
@@ -333,7 +333,7 @@
         android:singleLine="true"
         android:textColor="@color/redFalse"
         app:layout_constraintBottom_toTopOf="@+id/guideline52"
-        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline50"
         app:layout_constraintTop_toTopOf="@+id/guideline26" />
 
@@ -341,7 +341,7 @@
         android:id="@+id/remainingLabel"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:autoSizeMaxTextSize="15sp"
+        android:autoSizeMaxTextSize="20sp"
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
@@ -350,7 +350,7 @@
         android:text="@string/remainingLabel"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toStartOf="@+id/guideline55"
+        app:layout_constraintEnd_toStartOf="@+id/guideline49"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toTopOf="@+id/guideline52" />
 
@@ -358,7 +358,7 @@
         android:id="@+id/remainingValue"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:autoSizeMaxTextSize="15sp"
+        android:autoSizeMaxTextSize="20sp"
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
@@ -366,8 +366,8 @@
         android:singleLine="true"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toStartOf="@+id/guideline49"
-        app:layout_constraintStart_toStartOf="@+id/guideline55"
+        app:layout_constraintEnd_toStartOf="@+id/guideline50"
+        app:layout_constraintStart_toStartOf="@+id/guideline49"
         app:layout_constraintTop_toTopOf="@+id/guideline52" />
 
 
