@@ -18,14 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import Models.ArticlesModel;
@@ -37,17 +31,18 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.gerproject.germantrainieren.MainActivity.editor;
+import static Helpers.Stats.checkArticleValues;
+import static Helpers.Stats.resetArticleValues;
+import static Helpers.Stats.saveArticleValues;
 import static com.gerproject.germantrainieren.MainActivity.mContext;
 import static com.gerproject.germantrainieren.MainActivity.refreshBtns;
-import static com.gerproject.germantrainieren.MainActivity.sharedPref;
 
 public class Articles extends AppCompatActivity implements View.OnClickListener {
 
 
     private TextView _wordFromList;
-    private List<ArticlesModel> _allArticles;
-    private Integer _remainingArticles, _countCorrect, _countFalse;
+    public static List<ArticlesModel> _allArticles;
+    public static Integer _remainingArticles, _countCorrect, _countFalse;
     private Integer _random_index;
     private String _btnPressedTxt;
     private JsonPlaceHolderApi _jsonPlaceHolderApi;
@@ -77,7 +72,7 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
 
         refreshBtns();
 
-        checkValues();
+        checkArticleValues();
     }
 
 
@@ -200,10 +195,9 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
             }
         } else {
             //Close activity and show MainActivity
-            //Snackbar.make(v, getString(R.string.over), Snackbar.LENGTH_SHORT).show();
             ShowDialog(mContext.getString(R.string.over));
         }
-        saveValues();
+        saveArticleValues(_allArticles);
     }
 
     public void checkAnswer(View v){
@@ -238,60 +232,6 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
-    private void saveValues(){
-        //Save values in memory
-        editor = sharedPref.edit();
-        editor.putString(mContext.getString(R.string.correctLabel), String.valueOf(_countCorrect));
-        editor.putString(mContext.getString(R.string.falseLabel), String.valueOf(_countFalse));
-        editor.putString(mContext.getString(R.string.remainingLabel), String.valueOf(_remainingArticles));
-        //Set the values
-        Gson gson = new Gson();
-        String json = gson.toJson(_allArticles);
-        editor.putString(mContext.getString(R.string.article), json);
-        editor.apply();
-    }
-
-    private void checkValues(){
-
-        Integer countCorrect = 0, countFalse = 0, remainingArticles = 0;
-        List<ArticlesModel> allArticles = new ArrayList<>();
-        _countCorrect = countCorrect;
-        _countFalse = countFalse;
-        _remainingArticles = remainingArticles;
-        _allArticles = allArticles;
-
-        if(sharedPref.contains(mContext.getString(R.string.correctLabel))){
-            _countCorrect = Integer.valueOf(sharedPref.getString(mContext.getString(R.string.correctLabel),""));
-        }
-
-        if(sharedPref.contains(mContext.getString(R.string.falseLabel))){
-            _countFalse = Integer.valueOf(sharedPref.getString(mContext.getString(R.string.falseLabel),""));
-        }
-
-        if(sharedPref.contains(mContext.getString(R.string.remainingLabel))){
-            _remainingArticles = Integer.valueOf(sharedPref.getString(mContext.getString(R.string.remainingLabel),""));
-        }
-
-        Gson gson = new Gson();
-        String json = sharedPref.getString(mContext.getString(R.string.article),"");
-        Type type = new TypeToken<ArrayList<ArticlesModel>>() {}.getType();
-        _allArticles = gson.fromJson(json, type);
-
-        if(_allArticles == null){
-            _allArticles = new ArrayList<>();
-        }
-    }
-
-    private void resetValues(){
-        Integer countCorrect = 0, countFalse = 0, remainingArticles = 0;
-        List<ArticlesModel> allArticles = new ArrayList<>();
-        _countCorrect = countCorrect;
-        _countFalse = countFalse;
-        _remainingArticles = remainingArticles;
-        _allArticles = allArticles;
-        saveValues();
-    }
-
     private void ShowDialog(String stringMsg) {
         try {
 
@@ -310,7 +250,7 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
                 public void onClick(View v) {
                     dialog.dismiss();
                     //Reset sharedPref values
-                    resetValues();
+                    resetArticleValues();
                     _activity.finish();
                 }
             });
