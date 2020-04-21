@@ -34,7 +34,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static Helpers.RandomIndex.getRandomNumberInRange;
-import static android.app.PendingIntent.getActivity;
+import static Helpers.Stats.checkPluralValues;
+import static Helpers.Stats.resetPluralValues;
+import static Helpers.Stats.savePluralValues;
 import static com.gerproject.germantrainieren.MainActivity.mContext;
 import static com.gerproject.germantrainieren.MainActivity.refreshBtns;
 
@@ -46,9 +48,12 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
     private String _answer;
     private boolean _isCorrect;
     private TextView _pluralFromList;
-    private List<PluralsModel> _allPlurals;
+    public static List<PluralsModel> _allPlurals;
+    public static Integer _remainingPlurals, _countCorrectPlural, _countFalsePlural;
     private JsonPlaceHolderApi _jsonPlaceHolderApi;
     private Activity _activity;
+    private TextView _correctValuePlural, _falseValuePlural, _remainingValuePlural;
+
 
     public Plurals(){
 
@@ -69,38 +74,54 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
         _jsonPlaceHolderApi = jsonPlaceHolderApi;
 
         refreshBtns();
+
+        checkPluralValues();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plurals_layout);
-
-        _allPlurals = new ArrayList<>();
+        
         _answer_txt = findViewById(R.id.answer_txt);
         _pluralFromList = findViewById(R.id.pluralFromList);
+        _correctValuePlural = findViewById(R.id.correctValuePlural);
+        _falseValuePlural = findViewById(R.id.falseValuePlural);
+        _remainingValuePlural = findViewById(R.id.remainingValuePlural);
 
-        Call<List<PluralsModel>> call = _jsonPlaceHolderApi.GetAllFromPlurals();
+        _correctValuePlural.setText(_countCorrectPlural.toString());
+        _falseValuePlural.setText(_countFalsePlural.toString());
+        _remainingValuePlural.setText(_remainingPlurals.toString());
 
-        call.enqueue(new Callback<List<PluralsModel>>() {
-            @Override
-            public void onResponse(Call<List<PluralsModel>> call, Response<List<PluralsModel>> response) {
-                if(!response.isSuccessful()){
-                    setContentView(R.layout.failure_layout);
-                    return;
+        if(_countCorrectPlural == 0 && _countFalsePlural == 0 && _remainingPlurals == 0){
+            Call<List<PluralsModel>> call = _jsonPlaceHolderApi.GetAllFromPlurals();
+
+            call.enqueue(new Callback<List<PluralsModel>>() {
+                @Override
+                public void onResponse(Call<List<PluralsModel>> call, Response<List<PluralsModel>> response) {
+                    if(!response.isSuccessful()){
+                        setContentView(R.layout.failure_layout);
+                        return;
+                    }
+                    _allPlurals = response.body();
+                    _remainingPlurals = _allPlurals.size();
+                    _remainingValuePlural.setText(_remainingPlurals.toString());
+
+                    //Do all the code here, after the response//
+                    _random_index = getRandomNumberInRange(0, _allPlurals.size() - 1);
+                    _pluralFromList.setText(_allPlurals.get(_random_index).getSingular());
                 }
-                _allPlurals = response.body();
 
-                //Do all the code here, after the response//
-                _random_index = getRandomNumberInRange(0, _allPlurals.size() - 1);
-                _pluralFromList.setText(_allPlurals.get(_random_index).getSingular());
-            }
+                @Override
+                public void onFailure(Call<List<PluralsModel>> call, Throwable t) {
+                    setContentView(R.layout.failure_layout);
+                }
+            });
+        } else {
+            _random_index = getRandomNumberInRange(0, _allPlurals.size() - 1);
+            _pluralFromList.setText(_allPlurals.get(_random_index).getSingular());
+        }
 
-            @Override
-            public void onFailure(Call<List<PluralsModel>> call, Throwable t) {
-                setContentView(R.layout.failure_layout);
-            }
-        });
     }
 
     @Override
@@ -127,14 +148,21 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
 
                 if(_isCorrect){
                     ShowDialog(getString(R.string.correct));
+                    //Update correct counter
+                    _countCorrectPlural += 1;
+                    _correctValuePlural.setText(_countCorrectPlural.toString());
                 } else {
                     ShowDialog(getString(R.string.wrongPlural) + " " +  _allPlurals.get(_random_index).getPlural());
+                    //Update false counter
+                    _countFalsePlural += 1;
+                    _falseValuePlural.setText(_countFalsePlural.toString());
                 }
             }
         }
         else {
             Snackbar.make(v, getString(R.string.waitForServer), Snackbar.LENGTH_SHORT).show();
         }
+        savePluralValues(_allPlurals);
     }
 
     private void ShowDialog(String stringMsg) {
@@ -183,7 +211,8 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
     private void refreshList(){
         //Remove word from list//
         _allPlurals.remove(_allPlurals.get(_random_index));
-
+        _remainingPlurals =  _allPlurals.size();
+        _remainingValuePlural.setText(_remainingPlurals.toString());
         //Update view
         if(!_allPlurals.isEmpty()){
             //Generate new random index
@@ -194,6 +223,8 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
             _answer_txt.setText("");
         } else {
             ShowDialog(getString(R.string.over));
+            //Reset sharedPref values
+            resetPluralValues();
             finish();
         }
     }

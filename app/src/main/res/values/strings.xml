@@ -41,4 +41,7 @@
     <string name="correctLabel">Correct:</string>
     <string name="falseLabel">False:</string>
     <string name="remainingLabel">Remaining:</string>
+    <string name="correctLabelPlural">CorrectPlural:</string>
+    <string name="falseLabelPlural">FalsePlural:</string>
+    <string name="remainingLabelPlural">RemainingPlural:</string>
 </resources>

@@ -93,7 +93,6 @@ public class Articles extends AppCompatActivity implements View.OnClickListener 
         _articleBtnList[0] = _derBtn;
         _articleBtnList[1] = _dieBtn;
         _articleBtnList[2] = _dasBtn;
-        //_allArticles = new ArrayList<>();
 
         _correctValue.setText(_countCorrect.toString());
         _falseValue.setText(_countFalse.toString());
