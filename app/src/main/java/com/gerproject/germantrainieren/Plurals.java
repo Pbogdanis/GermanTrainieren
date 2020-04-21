@@ -82,7 +82,7 @@ public class Plurals extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plurals_layout);
-        
+
         _answer_txt = findViewById(R.id.answer_txt);
         _pluralFromList = findViewById(R.id.pluralFromList);
         _correctValuePlural = findViewById(R.id.correctValuePlural);
